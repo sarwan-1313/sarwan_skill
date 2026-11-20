@@ -1,0 +1,9 @@
+I stopped before changing anything. Pallets, the organization behind Click, appears not to accept AI-generated contributions.
+
+- **What the check found:** my contribution checker consulted a shared list of project AI policies (snapshot dated 2026-11-02). It says Pallets does not accept AI-generated contributions, and links to https://palletsprojects.com/contributing/llm-ai.
+- **What I couldn't confirm:** the Click repository has no AI policy file of its own, and I haven't read the linked page. So this comes from the list, not from Pallets' own text.
+- **What I haven't done:** no branch, no edit to `click.echo`, no `../pr.md`.
+
+Please read that page. If it does ban AI-assisted contributions, I shouldn't write this fix or the PR text, and I won't reword or split the work to get around the rule. The change is small enough that you could write it yourself. The `:param nl:` line in `src/click/utils.py` (line 265) currently says only "Print a newline after the message. Enabled by default."
+
+If the page says AI help is allowed, perhaps with a disclosure requirement, tell me and I'll make the fix. I'd then work on a new branch, run Click's own checks, and write `../pr.md` with the disclosure the policy asks for. I won't push or open the PR either way.

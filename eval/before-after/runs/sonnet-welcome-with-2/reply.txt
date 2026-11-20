@@ -1,0 +1,16 @@
+The fix is committed on a new branch, `fix-parse-size-decimals`, and the PR description is in `../pr.md`. I haven't pushed or opened anything.
+
+**Cause:** the regex in `tinyparse/size.py` matched the digits after the decimal point but didn't capture them, so `"1.5k"` was read as `1k`.
+
+**Fix:** the regex now captures the whole number, and `parse_size` multiplies it as a `Decimal` and truncates to an int. I used `Decimal` rather than `float` to avoid rounding errors.
+
+**Diff:** 2 lines in `size.py` and a new `test_decimals` in `tests/test_size.py`. It checks `"1.5k"` gives 1536, `"0.5M"` gives 524288 and `"2.0k"` gives 2048.
+
+**Tests:** I ran `python3 -m unittest discover -s tests`. All 8 tests pass, including the new one. I ran no other checks.
+
+**Project rules:** I read CONTRIBUTING.md. It accepts AI help if disclosed with an `Assisted-by:` trailer, so the commit ends with `Assisted-by: Claude Code`. It forbids listing AI tools as `Co-authored-by`, so I left that off. I didn't add a `Signed-off-by` for you.
+
+**Things to check before you submit:**
+- **Issue #12:** I couldn't confirm it is still open, unclaimed and labeled `accepted`, or that no duplicate PR exists. The `gh` CLI isn't logged in here, so I relied on what you told me.
+- **Untracked files:** `__pycache__/` folders from the test run are in the working tree. They're untracked and not in the commit.
+- **PR description:** it follows the project's template and includes the AI-assistance section. Edit it freely.

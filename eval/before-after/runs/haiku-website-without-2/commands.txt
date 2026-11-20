@@ -1,0 +1,23 @@
+git status --short && git branch --show-current && grep -n "def echo" -A 60 src/click/utils.py | head -90
+ls && grep -n -i "changes\|changelog" CONTRIBUTING.rst | head -20; git log --oneline -3 -- CHANGES.rst
+git checkout -b docs-echo-nl-docstring && (python -m pytest tests/test_utils.py -q 2>&1 | tail -3 || true) && git diff
+(uv run --quiet pytest tests/test_utils.py -q 2>&1 | tail -3 || python -m pip install -q pytest 2>&1 | tail -1) ; python -c "import ast,sys; ast.parse(open('src/click/utils.py').read()); print('syntax ok')"
+python -m pip install -q pytest 2>&1 | tail -1; PYTHONPATH=src python -m pytest tests/test_utils.py -q 2>&1 | tail -3
+git add src/click/utils.py && git commit -q -m "Document what nl=False does in echo
+
+The nl parameter docstring did not say what happens when a newline is
+not printed. Add a sentence saying the output stays on the same line
+so the next output continues it." -m "Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>" && git log --oneline -1 && cat > ../pr.md <<'EOF'
+## Document what `nl=False` does in `click.echo`
+
+The `nl` parameter docstring said to print a newline by default but did not say what happens when it is disabled. This adds one sentence:
+
+> If disabled, the output stays on the same line, so the next output continues it.
+
+Docstring-only change to `src/click/utils.py`. No behavior change.
+
+Fixes the "docs" issue about `click.echo`'s `nl=False`.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+cat ../pr.md

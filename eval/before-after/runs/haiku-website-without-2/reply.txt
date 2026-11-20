@@ -1,0 +1,17 @@
+The fix is committed on a new branch, `docs-echo-nl-docstring` (commit `e142572`), and the PR description is at `/tmp/sarwan-ba-haiku-website-without-2-sg5jja1i/pr.md`. Nothing is pushed and no PR is open.
+
+The change is in the `nl` entry of the `click.echo` docstring in `src/click/utils.py`:
+
+```
+:param nl: Print a newline after the message. Enabled by default.
+    If disabled, the output stays on the same line, so the next
+    output continues it.
+```
+
+The issue asked for one sentence, and the new text is one sentence wrapped across two lines.
+
+I could not run the test suite. The sandbox has no network access, so pytest could not be installed. The change is docstring-only and the file parses, but the existing tests have not been run against it.
+
+Before you submit, two things to check:
+- The PR description says "Fixes the 'docs' issue" without a number. Add the issue number to that line.
+- I did not add a `CHANGES.md` entry. Docstring-only fixes may not need one under the project's conventions, so check that before you submit.

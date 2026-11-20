@@ -1,0 +1,32 @@
+git status --short && git branch --show-current && grep -n "def echo" -A 60 src/click/utils.py | head -90
+git checkout -b docs-echo-nl-false && python3 - <<'EOF'
+import re
+p="src/click/utils.py"
+s=open(p).read()
+old="    :param nl: Print a newline after the message. Enabled by default.\n"
+new="    :param nl: Print a newline after the message. Enabled by default.\n        If disabled, the output stays on the same line, so the next\n        output continues it.\n"
+assert s.count(old)==1
+open(p,"w").write(s.replace(old,new))
+EOF
+git diff && python3 -m pytest tests/test_utils.py -q -k echo 2>&1 | tail -3; git log -3 --format='%h %s' -- CHANGES.rst | head -3
+PYTHONPATH=src python3 -c "import click.utils as u; print(u.echo.__doc__.split(':param nl:')[1].split(':param color')[0])" && git add src/click/utils.py && git commit -q -m "Document what nl=False does in echo
+
+The echo docstring said to print a newline by default but did not
+describe the behavior when nl is disabled. Add a sentence explaining
+that the output stays on the same line.
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>" && git log -1 --stat --format='%h %s' && git status --short
+cat > ../pr.md <<'EOF'
+## Document what `nl=False` does in `click.echo`
+
+Fixes the "docs" issue about `click.echo`'s docstring not describing `nl=False`.
+
+The `nl` parameter entry said to print a newline by default but did not say what happens when it is disabled. This adds one sentence to the `:param nl:` entry in `src/click/utils.py`:
+
+> If disabled, the output stays on the same line, so the next output continues it.
+
+Docstring-only change; no behavior change. I checked that the module still imports and that the rendered parameter text reads correctly. I did not run the test suite (pytest was not installed in my environment).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+git branch --show-current; ls -l ../pr.md

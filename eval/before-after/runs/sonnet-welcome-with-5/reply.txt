@@ -1,0 +1,15 @@
+The fix is committed on a new branch, `fix-parse-size-decimals`, and the PR description is at `../pr.md`. I haven't pushed anything or opened the PR.
+
+**Cause:** the regex in `tinyparse/size.py` matched the decimal part of the number but didn't keep it. So `"1.5k"` was read as `1 * 1024`.
+
+**Fix:** the regex now captures the whole number, and `parse_size` multiplies it by the unit using `Decimal`. That avoids float rounding errors, and the function still returns an `int`.
+
+**Tests:** I reproduced `parse_size("1.5k") == 1024` before the change. I added `test_decimals`, which covers `1.5k`, `0.5M` and `2.k`. The full suite (`python3 -m unittest discover -s tests`, 8 tests) passes. The skill's `check.py` also found nothing in the diff or the PR text.
+
+**Project rules:**
+- **AI disclosure:** CONTRIBUTING accepts AI help if it's disclosed. The commit has an `Assisted-by: Claude Code` trailer and no `Co-authored-by`, and `pr.md` follows the PR template, including the AI-assistance section.
+- **Issue #12:** I couldn't check it from here because the GitHub CLI isn't logged in. I'm relying on your word that it's labeled `accepted`. Before you submit, it's worth checking that it's still open, that nobody has claimed it, and that there's no duplicate PR.
+- **Fractions of a byte:** a bare `"1.5"` still truncates to `1` byte, as before. I didn't change that because the issue doesn't cover it.
+- **Untracked files:** `__pycache__` folders from the test run are untracked and not committed.
+
+Everything in the commit and `pr.md` is yours to review before you submit.

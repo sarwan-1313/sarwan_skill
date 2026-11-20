@@ -1,0 +1,12 @@
+Fix parse_size dropping the fraction of decimal sizes
+
+The regex matched the fractional part of a size but did not capture it,
+so int("1.5") discarded the ".5" and parse_size("1.5k") returned 1024
+instead of 1536. Capture the full number and multiply it as a Decimal
+so fractions stay exact, then truncate to a whole number of bytes.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

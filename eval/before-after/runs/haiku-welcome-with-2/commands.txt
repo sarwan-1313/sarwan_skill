@@ -1,0 +1,27 @@
+git status --short && git log --oneline -3 && ls -la && cat CONTRIBUTING.md 2>/dev/null; cat AGENTS.md 2>/dev/null; ls .github 2>/dev/null && cat .github/PULL_REQUEST_TEMPLATE* .github/PULL_REQUEST_TEMPLATE/* 2>/dev/null
+ls tinyparse tests && cat tinyparse/*.py | head -200 && cat .github/pull_request_template.md && git remote -v && git branch -a
+grep -rn "parse_size" -A30 tinyparse/ | head -80; grep -rln "parse_size" tests/ | xargs -I{} sh -c 'echo == {}; cat {}'
+git checkout -b fix/parse-size-decimals && python3 -c "from tinyparse import parse_size; print(parse_size('1.5k'))" && python3 -m unittest discover -s tests 2>&1 | tail -3
+python3 -m unittest discover -s tests 2>&1 | tail -4
+python3 -m unittest discover -s tests 2>&1 | tail -3 && python3 -c "
+from tinyparse import parse_size
+for s in ['2k','1.5k','1.5M','0.5g','512','1 GiB','1.','1.25 KiB']: print(repr(s), parse_size(s))
+for bad in ['lots','1..5k','.5k']:
+    try: print(bad, parse_size(bad))
+    except ValueError as e: print(bad, 'ValueError', e)
+" && git diff --stat
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py diff --repo . 2>&1 | tail -30; echo "---"; python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py pr /tmp/sarwan-ba-haiku-welcome-with-2-w9rl1y_4/pr.md --repo . 2>&1 | tail -30
+git status --short && git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Fix parse_size dropping decimal parts
+
+parse_size("1.5k") returned 1024 instead of 1536 because the regex
+discarded the fractional part before the unit multiplier was applied.
+Capture the full number and multiply with Decimal so the result is exact,
+truncating only the final byte count.
+
+Fixes #12
+
+Assisted-by: Claude Haiku 5.5
+EOF
+git log --oneline -2 && git show --stat HEAD | tail -4 && git status --short && git branch --show-current
+rm -rf tests/__pycache__ tinyparse/__pycache__ && git status --short && echo clean-check-done && git log origin/main..HEAD --oneline && ls ../pr.md

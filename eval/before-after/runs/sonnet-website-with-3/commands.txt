@@ -1,0 +1,1 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . ; grep -n "def echo" -A 40 src/click/utils.py | head -80

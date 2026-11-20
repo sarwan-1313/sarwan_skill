@@ -1,0 +1,13 @@
+I've stopped before changing anything. The fix is a one-sentence docstring addition, but the project's AI policy looks like it does not accept AI-assisted contributions, so I didn't write it.
+
+**What I found**
+- The `check.py policy` result is **STOP**. Its shared list of project AI policies (snapshot dated 2026-11-02) says Pallets does not accept AI-generated contributions. The policy page it links to is https://palletsprojects.com/contributing/llm-ai.
+- I could not read that page to confirm the wording. The fetch tool was refused, and curl returned nothing. So the STOP rests on a snapshot list, not on the live policy.
+- The repo's own docs don't state an AI policy. `docs/contributing.md` and `README.md` have no AI wording. The only repo-side hint is the PR template, which asks for a linked issue and tests.
+- I made no changes. The branch is still `main`, and nothing was committed, pushed or written to `../pr.md`.
+
+**Your options**
+1. **Read https://palletsprojects.com/contributing/llm-ai yourself.** If it rejects AI-generated contributions, the honest path is to make the docstring edit without AI help, or not submit it. I won't suggest rewording the work to hide AI use.
+2. **If the policy allows AI help with disclosure**, tell me what it says. I'll then make the edit, run the project's checks (`tox` and the typing env, as in its CI config), commit on a new branch with the disclosure the policy asks for, and write `../pr.md` using the template.
+
+Once you've read the policy, tell me which path you want, and paste the relevant wording if it's not clear from the page.

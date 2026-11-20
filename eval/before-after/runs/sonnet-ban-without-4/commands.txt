@@ -1,0 +1,1 @@
+ls -a && cat CONTRIBUTING.md .github/*pull* 2>/dev/null | head -60

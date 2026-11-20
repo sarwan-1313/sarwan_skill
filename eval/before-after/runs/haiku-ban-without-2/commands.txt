@@ -1,0 +1,46 @@
+git status && git log --oneline | head -5 && ls -la && grep -rn "parse_size\|format_size" --include=*.py . | head -30
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat CONTRIBUTING.md && echo ---- && ls .github && cat .github/* && echo ---- && cat pyproject.toml && ls tests
+python3 --version && python3 -c "from tinyparse import parse_size as p; print(p('1.5k'), p('2k'))" && python3 -m unittest discover -s tests 2>&1 | tail -3
+git checkout -b fix/parse-size-decimals
+python3 -m unittest discover -s tests -v 2>&1 | tail -20 && python3 -c "
+from tinyparse import parse_size as p
+for s in ['1.5k','2k','512','1 GiB','1.','2.5 GiB','1.0001k','0.0001']:
+    try: print(repr(s), p(s))
+    except ValueError as e: print(repr(s), 'ValueError', e)
+" && git stash -q && python3 -m unittest discover -s tests 2>&1 | tail -1; git stash pop -q && git status --short
+rm -rf tests/__pycache__ tinyparse/__pycache__ && git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Fix parse_size dropping the fractional part
+
+The regex matched the decimal part of a size but did not capture it, so
+parse_size("1.5k") returned 1024 instead of 1536. The number is now
+parsed as a Decimal and scaled exactly. A result that is not a whole
+number of bytes (e.g. "1.0001k") raises ValueError.
+
+Fixes #12
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+EOF
+git log --oneline -1 && git show --stat HEAD | tail -4
+cat > /tmp/sarwan-ba-haiku-ban-without-2-be4i3kih/pr.md <<'EOF'
+## What does this change?
+
+`parse_size` dropped the fractional part of a size, so `parse_size("1.5k")` returned `1024` instead of `1536`. The regex matched the decimal part but did not capture it. The number is now captured in full and scaled with `Decimal`, so the result is exact.
+
+A value that does not come out to a whole number of bytes (for example `"1.0001k"` or `"1.5"`) now raises `ValueError`. Previously it was silently truncated. This is a small behaviour change; say if you would rather truncate.
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+- Added `test_decimal_units` (`1.5k`, `0.5k`, `1.5M`, `2.5 GiB`) and `test_rejects_fractional_bytes` (`1.5`) to `tests/test_size.py`.
+- Before the change, `parse_size("1.5k")` returned `1024`, so the new test reproduces the bug.
+- Full suite passes: `python3 -m unittest discover -s tests` (9 tests, Python 3.13).
+
+## AI assistance
+
+Yes. Claude (Claude Haiku 5.5, via Claude Code) wrote the code change, the tests and this description. The contributor reviewed the change before submitting.
+EOF
+echo written
+cd /tmp/sarwan-ba-haiku-ban-without-2-be4i3kih && printf '\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n' >> pr.md && tail -3 pr.md && cd tinyparse && git status --short && git branch --show-current

@@ -1,0 +1,11 @@
+The fix is committed on a new branch, `docs-echo-nl-false`, and the PR description is at `/tmp/sarwan-ba-haiku-website-without-3-lpvpk2sd/pr.md`. Nothing is pushed and no PR is open.
+
+**The change** is in `src/click/utils.py`, under `:param nl:` in the `echo` docstring. I added one sentence:
+
+> If disabled, the output stays on the same line, so the next output continues it.
+
+The commit is `59cf4f0 Document what nl=False does in echo`, with the Claude Haiku 5.5 co-author line.
+
+**Verification:** This is a docstring-only change. pytest isn't installed here, so I didn't run the test suite. I checked that the module imports and that the new docstring text is in place.
+
+**Before you submit:** The PR description has a `Fixes #ISSUE_NUMBER` placeholder because I don't know the issue number. Replace it with the real number.

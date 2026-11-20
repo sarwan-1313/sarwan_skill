@@ -1,0 +1,11 @@
+Keep the fractional part of sizes in parse_size
+
+parse_size("1.5k") returned 1024: the decimal part was matched by the
+regex but dropped before multiplying by the unit. Parse the number as a
+Decimal so "1.5k" gives 1536. Whole numbers behave as before.
+
+Fixes #12
+
+Assisted-by: Claude Code (Claude Haiku 5.5)
+
+----

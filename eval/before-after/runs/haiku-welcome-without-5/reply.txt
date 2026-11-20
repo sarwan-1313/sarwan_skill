@@ -1,0 +1,11 @@
+The fix is committed on the new branch `fix/parse-size-decimals` as `a869bab`, and the PR description is at `/tmp/sarwan-ba-haiku-welcome-without-5-flhm5639/pr.md`. Nothing is pushed and no PR is open.
+
+**The bug:** the regex in `tinyparse/size.py` matched the fractional digits but didn't capture them, so only the integer part was multiplied. `parse_size("1.5k")` therefore gave 1024.
+
+**The fix:** the regex now captures the full decimal, and the value is multiplied with `Decimal` so the result is exact. `"1.5k"` now gives 1536. Results are still truncated to whole bytes, as before.
+
+**Tests:** I added `test_decimals` to `tests/test_size.py`. It fails on the old code (`1024 != 1536`) and passes with the fix. The full suite passes: 8 tests.
+
+**Decision for you to check: commit trailer.** Your Claude attribution reminder asks for a `Co-Authored-By: Claude Haiku 5.5` line in commits. `CONTRIBUTING.md` says AI help must be disclosed with an `Assisted-by:` trailer and that AI tools must not be listed as `Co-authored-by`. I followed the project's rule, so the commit ends with `Assisted-by: Claude Haiku 5.5`. If you want the other line, it's a one-line amend.
+
+The PR description follows the repo template and includes `Fixes #12` and the Claude Code line the reminder asked for.

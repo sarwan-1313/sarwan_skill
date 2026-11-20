@@ -1,0 +1,10 @@
+Fix parse_size truncating decimal values
+
+parse_size("1.5k") returned 1024 because the fractional part was matched
+but discarded. Parse the full number exactly and scale it.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

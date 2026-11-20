@@ -1,0 +1,790 @@
+{
+ "source": "https://github.com/melissawm/open-source-ai-contribution-policies",
+ "license": "CC0-1.0",
+ "snapshot": "2026-11-02",
+ "total": 189,
+ "counts": {
+  "yes": 78,
+  "no": 102,
+  "with-conditions": 9
+ },
+ "accepting": {
+  "total": 87,
+  "disclosure_required": 53,
+  "human_in_the_loop": 82
+ },
+ "examples": {
+  "yes": [
+   {
+    "project": "Linux Kernel",
+    "policy_url": "https://kernel.org/doc/html/next/process/coding-assistants.html"
+   },
+   {
+    "project": "LLVM",
+    "policy_url": "https://llvm.org/docs//AIToolPolicy.html"
+   },
+   {
+    "project": "curl",
+    "policy_url": "https://curl.se/dev/contribute.html#on-ai-use-in-curl"
+   },
+   {
+    "project": "Django",
+    "policy_url": "https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/submitting-patches/#ai-assisted-contributions"
+   },
+   {
+    "project": "NumPy",
+    "policy_url": "https://numpy.org/devdocs/dev/ai_policy.html"
+   },
+   {
+    "project": "Kubernetes",
+    "policy_url": "https://www.kubernetes.dev/docs/guide/pull-requests/#ai-guidance"
+   },
+   {
+    "project": "Rust",
+    "policy_url": "https://forge.rust-lang.org/policies/llm-usage.html"
+   },
+   {
+    "project": "Fedora",
+    "policy_url": "https://docs.fedoraproject.org/en-US/council/policy/ai-contribution-policy/"
+   },
+   {
+    "project": "pip",
+    "policy_url": "https://github.com/pypa/pip/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "Ghostty",
+    "policy_url": "https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "SciPy",
+    "policy_url": "https://scipy.github.io/devdocs/dev/conduct/ai_policy.html"
+   },
+   {
+    "project": "Matplotlib",
+    "policy_url": "https://matplotlib.org/devdocs/devel/contribute.html#generative-ai"
+   },
+   {
+    "project": "Apache Airflow",
+    "policy_url": "https://github.com/apache/airflow/blob/main/contributing-docs/05_pull_requests.rst#gen-ai-assisted-contributions"
+   },
+   {
+    "project": "Homebrew",
+    "policy_url": "https://github.com/Homebrew/brew/blob/main/CONTRIBUTING.md#artificial-intelligencelarge-language-model-aillm-usage"
+   },
+   {
+    "project": "Apache DataFusion",
+    "policy_url": "https://datafusion.apache.org/contributor-guide/index.html#ai-assisted-contributions"
+   },
+   {
+    "project": "Apache Kvrocks",
+    "policy_url": "https://kvrocks.apache.org/community/contributing/#guidelines-for-ai-assisted-contributions"
+   },
+   {
+    "project": "Apache® Software Foundation (ASF)",
+    "policy_url": "https://www.apache.org/legal/generative-tooling.html"
+   },
+   {
+    "project": "Arrow",
+    "policy_url": "https://arrow.apache.org/docs/dev/developers/overview.html#ai-generated-code"
+   },
+   {
+    "project": "Astropy",
+    "policy_url": "https://github.com/astropy/astropy-project/blob/main/policies/ai-policy.md"
+   },
+   {
+    "project": "attrs",
+    "policy_url": "https://github.com/python-attrs/attrs/blob/main/.github/AI_POLICY.md"
+   },
+   {
+    "project": "CCExtractor",
+    "policy_url": "https://ccextractor.org/public/gsoc/ai_policy/"
+   },
+   {
+    "project": "cilium",
+    "policy_url": "https://github.com/cilium/community/blob/main/AI-POLICY.md"
+   },
+   {
+    "project": "CloudNativePG",
+    "policy_url": "https://github.com/cloudnative-pg/governance/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "conda",
+    "policy_url": "https://docs.conda.io/projects/conda/en/latest/dev-guide/contributing.html#generative-ai"
+   },
+   {
+    "project": "CPython",
+    "policy_url": "https://devguide.python.org/getting-started/generative-ai/"
+   },
+   {
+    "project": "CuPy",
+    "policy_url": "https://docs.cupy.dev/en/stable/contribution.html#ai-policies"
+   },
+   {
+    "project": "DataJourneyHQ",
+    "policy_url": "https://github.com/DataJourneyHQ/DataJourney/wiki/Contribution-Guidelines-(AI%E2%80%90Aware"
+   },
+   {
+    "project": "Drupal",
+    "policy_url": "https://www.drupal.org/docs/develop/issues/issue-procedures-and-etiquette/policy-on-the-use-of-ai-when-contributing-to-drupal"
+   },
+   {
+    "project": "EasyBuild",
+    "policy_url": "https://docs.easybuild.io/policies/ai/"
+   },
+   {
+    "project": "FastAPI",
+    "policy_url": "https://tiangolo.com/open-source/contributing/#automated-code-and-ai"
+   },
+   {
+    "project": "Fedify",
+    "policy_url": "https://github.com/fedify-dev/fedify/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "Firefox",
+    "policy_url": "https://firefox-source-docs.mozilla.org/contributing/ai-coding.html"
+   },
+   {
+    "project": "Flutter",
+    "policy_url": "https://github.com/flutter/flutter/blob/master/docs/contributing/Tree-hygiene.md#ai-contribution-guidelines"
+   },
+   {
+    "project": "GDAL",
+    "policy_url": "https://gdal.org/en/stable/community/ai_tool_policy.html"
+   },
+   {
+    "project": "Gitea",
+    "policy_url": "https://github.com/go-gitea/gitea/blob/main/CONTRIBUTING.md#ai-contribution-policy"
+   },
+   {
+    "project": "GNOME Extensions",
+    "policy_url": "https://gjs.guide/extensions/review-guidelines/review-guidelines.html#extensions-must-not-be-ai-generated"
+   },
+   {
+    "project": "goose",
+    "policy_url": "https://github.com/aaif-goose/goose/blob/main/CONTRIBUTING.md#quick-responsible-ai-tips"
+   },
+   {
+    "project": "Icechunk",
+    "policy_url": "https://icechunk.io/en/latest/ai-policy/"
+   },
+   {
+    "project": "IREE (Intermediate Representation Execution Environment)",
+    "policy_url": "https://iree.dev/developers/general/contributing/#ai-tool-use"
+   },
+   {
+    "project": "Jellyfin",
+    "policy_url": "https://jellyfin.org/docs/general/contributing/llm-policies/"
+   },
+   {
+    "project": "Joomla",
+    "policy_url": "https://developer.joomla.org/generative-ai-policy.html"
+   },
+   {
+    "project": "Kornia",
+    "policy_url": "https://github.com/kornia/kornia/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "LinkML",
+    "policy_url": "https://github.com/linkml/linkml/blob/main/AI_COVENANT.md"
+   },
+   {
+    "project": "Mesa",
+    "policy_url": "https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/docs/submittingpatches.rst?ref_type=heads#id2"
+   },
+   {
+    "project": "MicroPython",
+    "policy_url": "https://github.com/micropython/micropython/wiki/ContributorGuidelines#generative-ai-policy"
+   },
+   {
+    "project": "napari",
+    "policy_url": "https://napari.org/dev/developers/contributing/ai.html"
+   },
+   {
+    "project": "OCaml",
+    "policy_url": "https://github.com/ocaml/ocaml/blob/trunk/AI.md"
+   },
+   {
+    "project": "OpenInfra",
+    "policy_url": "https://openinfra.org/legal/ai-policy"
+   },
+   {
+    "project": "Oxide",
+    "policy_url": "https://rfd.shared.oxide.computer/rfd/0576"
+   },
+   {
+    "project": "Pandas",
+    "policy_url": "https://pandas.pydata.org/docs/dev/development/contributing.html#automated-contributions-policy"
+   },
+   {
+    "project": "pgwatch",
+    "policy_url": "https://github.com/cybertec-postgresql/pgwatch/blob/master/AI_POLICY.md"
+   },
+   {
+    "project": "pip-tools",
+    "policy_url": "https://pip-tools.readthedocs.io/en/latest/contributing/#project-contribution-guidelines"
+   },
+   {
+    "project": "Polars",
+    "policy_url": "https://github.com/pola-rs/polars/blob/8425c750b9c5d28c79428998fda2320d076d4178/AI_POLICY.md"
+   },
+   {
+    "project": "pretix",
+    "policy_url": "https://docs.pretix.eu/dev/development/contribution/ai.html"
+   },
+   {
+    "project": "Processing/p5.js",
+    "policy_url": "https://github.com/processing/processing4/blob/main/AI_USAGE_POLICY.md"
+   },
+   {
+    "project": "Pytest",
+    "policy_url": "https://github.com/pytest-dev/pytest/blob/main/CONTRIBUTING.rst#aillm-assisted-contributions-policy"
+   },
+   {
+    "project": "PyTorch",
+    "policy_url": "https://github.com/pytorch/pytorch/blob/main/CONTRIBUTING.md#ai-assisted-development"
+   },
+   {
+    "project": "PyVista",
+    "policy_url": "https://github.com/pyvista/pyvista/blob/main/CONTRIBUTING.rst#generative-ai"
+   },
+   {
+    "project": "QGIS",
+    "policy_url": "https://github.com/qgis/QGIS-Enhancement-Proposals/blob/master/qep-408-ai-tool-policy.md"
+   },
+   {
+    "project": "qutip",
+    "policy_url": "https://github.com/qutip/qutip/blob/master/CONTRIBUTING.md#ai-tools-usage-policy"
+   },
+   {
+    "project": "Requests",
+    "policy_url": "https://github.com/psf/requests/blob/main/.github/AI_POLICY.md"
+   },
+   {
+    "project": "ruff",
+    "policy_url": "https://github.com/astral-sh/.github/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "RustPython",
+    "policy_url": "https://github.com/RustPython/.github/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "scikit-image",
+    "policy_url": "https://scikit-image.org/docs/dev/development/contribute.html#ai-policy"
+   },
+   {
+    "project": "scikit-learn",
+    "policy_url": "https://scikit-learn.org/dev/developers/contributing.html#automated-contributions-policy"
+   },
+   {
+    "project": "SearXNG",
+    "policy_url": "https://github.com/searxng/searxng/blob/master/AI_POLICY.rst"
+   },
+   {
+    "project": "Sphinx",
+    "policy_url": "https://github.com/sphinx-doc/sphinx/blob/master/doc/internals/ai-policy.rst"
+   },
+   {
+    "project": "STAC",
+    "policy_url": "https://github.com/stac-utils/stac-utils.github.io/blob/main/docs/ai-contribution-policy.md"
+   },
+   {
+    "project": "SymPy",
+    "policy_url": "https://docs.sympy.org/dev/contributing/ai-generated-code-policy.html"
+   },
+   {
+    "project": "Telegraf",
+    "policy_url": "https://www.influxdata.com/ai-generated-code-contributions-policy/"
+   },
+   {
+    "project": "TorchGeo",
+    "policy_url": "https://github.com/torchgeo/governance/blob/main/AI-POLICY.md"
+   },
+   {
+    "project": "ty",
+    "policy_url": "https://github.com/astral-sh/.github/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "typescript-eslint",
+    "policy_url": "https://typescript-eslint.io/contributing/ai-policy/"
+   },
+   {
+    "project": "uv",
+    "policy_url": "https://github.com/astral-sh/.github/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "Wagtail",
+    "policy_url": "https://docs.wagtail.org/en/latest/contributing/general_guidelines.html#general-coding-guidelines"
+   },
+   {
+    "project": "WP1",
+    "policy_url": "https://github.com/openzim/wp1/blob/main/CONTRIBUTING.md#usage-of-llmsai-coding-assistants"
+   },
+   {
+    "project": "Xarray",
+    "policy_url": "https://github.com/pydata/xarray/blob/main/doc/contribute/ai-policy.md"
+   },
+   {
+    "project": "Zulip",
+    "policy_url": "https://github.com/zulip/zulip/blob/main/CONTRIBUTING.md#ai-use-policy-and-guidelines"
+   }
+  ],
+  "no": [
+   {
+    "project": "QEMU",
+    "policy_url": "https://www.qemu.org/docs/master/devel/code-provenance.html#use-of-ai-generated-content"
+   },
+   {
+    "project": "Gentoo Linux",
+    "policy_url": "https://wiki.gentoo.org/wiki/Project:Council/AI_policy"
+   },
+   {
+    "project": "Zig",
+    "policy_url": "https://ziglang.org/code-of-conduct/#strict-no-llm-no-ai-policy"
+   },
+   {
+    "project": "Servo",
+    "policy_url": "https://book.servo.org/contributing/getting-started.html#ai-contributions"
+   },
+   {
+    "project": "Pallets",
+    "policy_url": "https://palletsprojects.com/contributing/llm-ai"
+   },
+   {
+    "project": "Bevy",
+    "policy_url": "https://bevy.org/learn/contribute/policies/ai/"
+   },
+   {
+    "project": "OpenJDK",
+    "policy_url": "https://openjdk.org/legal/ai"
+   },
+   {
+    "project": "Godot Engine",
+    "policy_url": "https://contributing.godotengine.org/en/latest/pull_requests/pull_request_guidelines.html#ai-assisted-contributions"
+   },
+   {
+    "project": "Asahi Linux",
+    "policy_url": "https://asahilinux.org/docs/project/policies/slop/"
+   },
+   {
+    "project": "Alacritty",
+    "policy_url": "https://github.com/alacritty/alacritty/blob/master/CONTRIBUTING.md#llmai-contributions"
+   },
+   {
+    "project": "Adwaita",
+    "policy_url": "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/CONTRIBUTING.md?ref_type=heads#use-of-generative-ai"
+   },
+   {
+    "project": "Allium",
+    "policy_url": "https://github.com/moongardenmods/allium/blob/main/CONTRIBUTING.md#ai-contributions"
+   },
+   {
+    "project": "Amberol",
+    "policy_url": "https://gitlab.gnome.org/World/amberol/-/blob/main/CONTRIBUTING.md#use-of-generative-ai"
+   },
+   {
+    "project": "Apache CouchDB",
+    "policy_url": "https://github.com/apache/couchdb/blob/main/CONTRIBUTING.md#artificial-intelligence-and-large-language-models-contributions-policy"
+   },
+   {
+    "project": "Apache PouchDB",
+    "policy_url": "https://github.com/apache/pouchdb/blob/master/CONTRIBUTING.md#artificial-intelligence-and-large-language-models-contributions-policy"
+   },
+   {
+    "project": "Arcalibre",
+    "policy_url": "https://blog.rereading.space/rereading-because-books-are-art-and-art-is-labor"
+   },
+   {
+    "project": "Avoyd",
+    "policy_url": "https://www.enkisoftware.com/faq#nogenAI"
+   },
+   {
+    "project": "Bobby",
+    "policy_url": "https://github.com/hbons/Bobby?tab=contributing-ov-file#use-of-generative-ai"
+   },
+   {
+    "project": "CapyPDF",
+    "policy_url": "https://github.com/jpakkane/capypdf/?tab=readme-ov-file#ai-policy"
+   },
+   {
+    "project": "Cataclysm: Dark Days Ahead",
+    "policy_url": "https://github.com/CleverRaven/Cataclysm-DDA/blob/master/CONTRIBUTING.md#licensing-and-authorship"
+   },
+   {
+    "project": "CC Open Source",
+    "policy_url": "https://opensource.creativecommons.org/contributing-code/"
+   },
+   {
+    "project": "Cheese Paper",
+    "policy_url": "https://codeberg.org/ByteOfBrie/cheese-paper#ai"
+   },
+   {
+    "project": "chezmoi",
+    "policy_url": "https://www.chezmoi.io/developer-guide/"
+   },
+   {
+    "project": "Chimera Linux",
+    "policy_url": "https://gts.chimera-linux.org/@chimera/statuses/01KK78VSB4G5S75STYEY3YTR2H"
+   },
+   {
+    "project": "ChiPass",
+    "policy_url": "https://codeberg.org/ChiPass/ChiPass/src/branch/main/CONTRIBUTING.md"
+   },
+   {
+    "project": "Clojure",
+    "policy_url": "https://clojure.org/dev/contributor_agreement#_no_generated_code"
+   },
+   {
+    "project": "Decker",
+    "policy_url": "https://github.com/JohnEarnest/Decker/blob/main/Readme.md#contributing"
+   },
+   {
+    "project": "do",
+    "policy_url": "https://codeberg.org/cgranade/do#license-and-ai-policy"
+   },
+   {
+    "project": "Dune 3D",
+    "policy_url": "https://github.com/dune3d/dune3d/blob/main/CONTRIBUTING.md#use-of-large-language-models--generative-ai"
+   },
+   {
+    "project": "Elastic",
+    "policy_url": "https://gitlab.gnome.org/World/elastic#use-of-generative-ai"
+   },
+   {
+    "project": "Elementary OS",
+    "policy_url": "https://docs.elementary.io/contributor-guide/development/generative-ai-policy"
+   },
+   {
+    "project": "EmulatorKit",
+    "policy_url": "https://codeberg.org/EtchedPixels/EmulatorKit/src/branch/master/ContributionRules"
+   },
+   {
+    "project": "Endless Sky",
+    "policy_url": "https://github.com/endless-sky/endless-sky/blob/master/docs/CONTRIBUTING.md#on-ai-generatedassisted-content"
+   },
+   {
+    "project": "Evi",
+    "policy_url": "https://codeberg.org/evi-editor/evi/src/branch/master/CONTRIBUTING.md#using-ai"
+   },
+   {
+    "project": "Exim",
+    "policy_url": "https://code.exim.org/exim/exim#contributing-to-exim"
+   },
+   {
+    "project": "Fennel",
+    "policy_url": "https://git.sr.ht/~technomancy/fennel/tree/main/item/CONTRIBUTING.md#contribution-transparency"
+   },
+   {
+    "project": "Forgejo",
+    "policy_url": "https://codeberg.org/forgejo/governance/src/branch/main/AIAgreement.md"
+   },
+   {
+    "project": "Fractal",
+    "policy_url": "https://gitlab.gnome.org/World/fractal/-/blob/main/CONTRIBUTING.md#llm-contributions"
+   },
+   {
+    "project": "gaypanel",
+    "policy_url": "https://codeberg.org/pastthepixels/gaypanel/src/branch/main/CONTRIBUTING.md#things-that-aren-t-allowed"
+   },
+   {
+    "project": "Gedit",
+    "policy_url": "https://gitlab.gnome.org/World/gedit/gedit/-/blob/master/docs/guidelines/no-llm-tools.md"
+   },
+   {
+    "project": "GIMP",
+    "policy_url": "https://gitlab.gnome.org/GNOME/gimp/-/blob/master/.gitlab/merge_request_templates/default.md?plain=1#L11-12"
+   },
+   {
+    "project": "Gitte",
+    "policy_url": "https://codeberg.org/ckruse/Gitte/src/branch/main/README.md#contributing"
+   },
+   {
+    "project": "Glasgow Interface Explorer",
+    "policy_url": "https://glasgow-embedded.org/latest/contribute.html#contributing-code-or-documentation"
+   },
+   {
+    "project": "GNOME Loupe",
+    "policy_url": "https://gitlab.gnome.org/GNOME/loupe/-/blob/main/CONTRIBUTING.md?ref_type=heads#use-of-generative-ai"
+   },
+   {
+    "project": "GNU Binutils",
+    "policy_url": "https://sourceware.org/binutils/wiki/LLM_Generated_Content"
+   },
+   {
+    "project": "GoToSocial",
+    "policy_url": "https://codeberg.org/superseriousbusiness/gotosocial/src/branch/main/CODE_OF_CONDUCT.md"
+   },
+   {
+    "project": "Gram",
+    "policy_url": "https://codeberg.org/GramEditor/gram/src/branch/main/CODE_OF_CONDUCT.md#strict-no-llm-no-ai-policy"
+   },
+   {
+    "project": "Halloy",
+    "policy_url": "https://halloy.chat/contributing#ai"
+   },
+   {
+    "project": "Highscore",
+    "policy_url": "https://gitlab.gnome.org/World/highscore/-/blob/main/CONTRIBUTING.md?ref_type=heads#use-of-generative-ai"
+   },
+   {
+    "project": "hit-counter.net",
+    "policy_url": "https://www.hit-counter.net/aipolicy.php"
+   },
+   {
+    "project": "Iceshrimp",
+    "policy_url": "https://kb.iceshrimp.dev/s/63ae7f15-e1f1-45d6-ae26-d3a3b35d2e02/doc/ai-policy-paZIKo68tk"
+   },
+   {
+    "project": "Idris",
+    "policy_url": "https://github.com/idris-lang/Idris2/blob/main/CONTRIBUTING.md#things-we-will-not-accept"
+   },
+   {
+    "project": "Inkscape",
+    "policy_url": "https://social.treehouse.systems/@dysfun/116182391411729473"
+   },
+   {
+    "project": "Inochi2D",
+    "policy_url": "https://github.com/Inochi2D/inochi2d/blob/main/CONTRIBUTING.md#on-generative-ai"
+   },
+   {
+    "project": "Iocaine",
+    "policy_url": "https://git.madhouse-project.org/iocaine/iocaine/src/branch/main/CONTRIBUTING.md"
+   },
+   {
+    "project": "Jqwik",
+    "policy_url": "https://github.com/jqwik-team/jqwik/blob/main/CONTRIBUTING.md"
+   },
+   {
+    "project": "jsoup",
+    "policy_url": "https://github.com/jhy/jsoup/blob/master/.github/CONTRIBUTING.md#use-of-ai"
+   },
+   {
+    "project": "Krita",
+    "policy_url": "https://invent.kde.org/graphics/krita#user-content-ai-moratorium"
+   },
+   {
+    "project": "Leiningen",
+    "policy_url": "https://codeberg.org/leiningen/leiningen/src/branch/stable/CONTRIBUTING.md#contributing"
+   },
+   {
+    "project": "libadwaita",
+    "policy_url": "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/CONTRIBUTING.md?ref_type=heads#use-of-generative-ai"
+   },
+   {
+    "project": "libmanette",
+    "policy_url": "https://gitlab.gnome.org/GNOME/libmanette/-/blob/main/CONTRIBUTING.md?ref_type=heads#use-of-generative-ai"
+   },
+   {
+    "project": "libxml2",
+    "policy_url": "https://gitlab.gnome.org/GNOME/libxml2#strict-no-llm--no-ai-policy"
+   },
+   {
+    "project": "Lighthouse",
+    "policy_url": "https://github.com/team-crystalline/Lighthouse/tree/master?tab=readme-ov-file#a-quick-constitution-for-lighthouse"
+   },
+   {
+    "project": "Linux man-pages",
+    "policy_url": "https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/CONTRIBUTING.d/ai"
+   },
+   {
+    "project": "Lobsters",
+    "policy_url": "https://github.com/lobsters/lobsters/blob/main/CONTRIBUTING.md#getting-oriented"
+   },
+   {
+    "project": "LÖVE",
+    "policy_url": "https://github.com/love2d/love#contributing"
+   },
+   {
+    "project": "Makko",
+    "policy_url": "https://forge.starlightnet.work/Team/Meta/src/branch/master/Contribution-Policy-Agreement.md"
+   },
+   {
+    "project": "mGBA",
+    "policy_url": "https://github.com/mgba-emu/mgba/blob/master/CONTRIBUTING.md#filing-pull-requests"
+   },
+   {
+    "project": "Migraine Log",
+    "policy_url": "https://gitlab.com/mglog/org.zerodogg.migraineLog/-/blob/main/CONTRIBUTING.md?ref_type=heads#use-of-generative-ai"
+   },
+   {
+    "project": "Mikan",
+    "policy_url": "https://codeberg.org/1lab/mikan/src/branch/main/CONTRIBUTING.md"
+   },
+   {
+    "project": "MirBSD",
+    "policy_url": "https://mbsd.evolvis.org/permalinks/wlog2021_e20240726.htm#e20240726_wlog2021"
+   },
+   {
+    "project": "Musl",
+    "policy_url": "https://www.openwall.com/lists/musl/2026/03/01/4"
+   },
+   {
+    "project": "OkHttp",
+    "policy_url": "https://github.com/lysine-dev/okhttp/blob/main/CONTRIBUTING.md#no-generative-tools"
+   },
+   {
+    "project": "OpenTTD",
+    "policy_url": "https://github.com/OpenTTD/OpenTTD/blob/master/CONTRIBUTING.md#use-of-ai"
+   },
+   {
+    "project": "Pandemonium Engine",
+    "policy_url": "https://github.com/Relintai/pandemonium_engine#contributions-use-of-ai-content-generators"
+   },
+   {
+    "project": "pkgconf",
+    "policy_url": "https://github.com/pkgconf/pkgconf/blob/master/CONTRIBUTING.md#instructions-for-agentic-systems"
+   },
+   {
+    "project": "Poezio",
+    "policy_url": "https://codeberg.org/poezio/poezio#use-of-generative-ai"
+   },
+   {
+    "project": "Polyphony",
+    "policy_url": "https://codeberg.org/polyphony/.profile/src/branch/main/CODE_OF_CONDUCT.md"
+   },
+   {
+    "project": "postmarketOS",
+    "policy_url": "https://docs.postmarketos.org/policies-and-processes/development/ai-policy.html"
+   },
+   {
+    "project": "Redox OS",
+    "policy_url": "https://gitlab.redox-os.org/redox-os/redox/-/blob/master/CONTRIBUTING.md#ai-policy"
+   },
+   {
+    "project": "Schism Tracker",
+    "policy_url": "https://github.com/schismtracker/schismtracker/blob/master/AGENTS.md"
+   },
+   {
+    "project": "SciActive",
+    "policy_url": "https://sciactive.com/human-contribution-policy/"
+   },
+   {
+    "project": "SDL",
+    "policy_url": "https://github.com/libsdl-org/SDL/blob/main/.github/PULL_REQUEST_TEMPLATE.md"
+   },
+   {
+    "project": "SDL_net",
+    "policy_url": "https://github.com/libsdl-org/SDL_net/blob/main/AGENTS.md"
+   },
+   {
+    "project": "Sentinel",
+    "policy_url": "https://codeberg.org/cr1901/sentinel/src/branch/main/CONTRIBUTING.md#ai-guidelines"
+   },
+   {
+    "project": "Skarnet",
+    "policy_url": ""
+   },
+   {
+    "project": "Smederee",
+    "policy_url": "https://smeder.ee/~jan0sch/smederee/files/CONTRIBUTING.md"
+   },
+   {
+    "project": "snac",
+    "policy_url": "https://codeberg.org/grunfink/snac2/src/branch/master/CONTRIBUTING.md"
+   },
+   {
+    "project": "stb",
+    "policy_url": "https://github.com/nothings/stb/blob/master/CONTRIBUTING.md#ai-and-llm-are-forbidden"
+   },
+   {
+    "project": "Teamtype",
+    "policy_url": "https://github.com/teamtype/teamtype/blob/main/CONTRIBUTING.md#generative-aillm-policy"
+   },
+   {
+    "project": "Tenacity",
+    "policy_url": "https://codeberg.org/tenacityteam/tenacity/src/branch/main/CONTRIBUTING.md#the-use-of-llms-and-ai-in-contributions"
+   },
+   {
+    "project": "Tusky",
+    "policy_url": "https://codeberg.org/tusky/Tusky/src/branch/develop/CONTRIBUTING.md#ai-policy"
+   },
+   {
+    "project": "Twisted",
+    "policy_url": "https://docs.twisted.org/en/latest/development/ai-policy.html"
+   },
+   {
+    "project": "Unbound",
+    "policy_url": "https://nlnetlabs.nl/llm-policy/"
+   },
+   {
+    "project": "Unison",
+    "policy_url": "https://github.com/bcpierce00/unison/blob/master/CONTRIBUTING.md#llm-usage"
+   },
+   {
+    "project": "Veloren",
+    "policy_url": "https://gitlab.com/veloren/veloren/-/blob/master/CONTRIBUTING.md?ref_type=heads#do-not-commit-tainted-content-to-the-repository"
+   },
+   {
+    "project": "Vim Classic",
+    "policy_url": "https://sr.ht/~sircmpwn/vim-classic/"
+   },
+   {
+    "project": "Wafrn",
+    "policy_url": "https://codeberg.org/wafrn/wafrn/src/branch/main/CONTRIBUTING.md"
+   },
+   {
+    "project": "x86css",
+    "policy_url": "https://lyra.horse/x86css/#ai"
+   },
+   {
+    "project": "XScreenSaver",
+    "policy_url": "https://www.jwz.org/xscreensaver/faq.html#writing-savers"
+   },
+   {
+    "project": "yt-dlp",
+    "policy_url": "https://github.com/yt-dlp/yt-dlp/blob/master/CONTRIBUTING.md#automated-contributions-ai--llm-policy"
+   },
+   {
+    "project": "Ziglings",
+    "policy_url": "https://codeberg.org/ziglings/exercises/src/branch/main/CONTRIBUTING.md#ai-generated-content"
+   }
+  ],
+  "with-conditions": [
+   {
+    "project": "NetBSD",
+    "policy_url": "https://www.netbsd.org/developers/commit-guidelines.html"
+   },
+   {
+    "project": "Borgmatic",
+    "policy_url": "https://projects.torsion.org/borgmatic-collective/borgmatic/src/branch/main/AGENTS.md"
+   },
+   {
+    "project": "dlt",
+    "policy_url": "https://github.com/dlt-hub/dlt/blob/devel/CONTRIBUTING.md#ai-assisted-contributions"
+   },
+   {
+    "project": "MDAnalysis",
+    "policy_url": "https://github.com/MDAnalysis/mdanalysis/blob/develop/AI_POLICY.md"
+   },
+   {
+    "project": "Molecular Nodes",
+    "policy_url": "https://github.com/BradyAJohnston/MolecularNodes/blob/main/AI_POLICY.md"
+   },
+   {
+    "project": "nvim-tree",
+    "policy_url": "https://github.com/nvim-tree/nvim-tree.lua?tab=contributing-ov-file#ai-usage-policy-highly-discouraged"
+   },
+   {
+    "project": "Open edX",
+    "policy_url": "https://github.com/openedx/.github/blob/master/AI_POLICY.md"
+   },
+   {
+    "project": "University of Alaska Anchorage",
+    "policy_url": "https://github.com/uaanchorage/GSoC/blob/main/Acceptable-and-Ethical-AI-Use-Policy.md"
+   },
+   {
+    "project": "Wikipedia",
+    "policy_url": "https://en.wikipedia.org/wiki/Wikipedia:Artificial_intelligence"
+   }
+  ]
+ },
+ "context": [
+  {
+   "text": "Of 1,000 popular GitHub repositories, 118 had an AI contribution policy. Of those, 78% accept AI-assisted contributions and 22% discourage them; 51% require disclosure and 74% require human oversight.",
+   "source": "Hora and Robbes, 'AI Policy, Disclosure, and Human in the Loop', arXiv:2605.16706 (2026)"
+  },
+  {
+   "text": "Maintainers estimate that about 25% of incoming pull requests are low-quality AI output (31% at large projects).",
+   "source": "Linux Foundation Research, October 2026"
+  }
+ ]
+}

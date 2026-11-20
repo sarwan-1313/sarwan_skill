@@ -1,0 +1,2 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . 2>&1 | head -150
+git status --short && git remote -v && ls -la && git log --oneline -3

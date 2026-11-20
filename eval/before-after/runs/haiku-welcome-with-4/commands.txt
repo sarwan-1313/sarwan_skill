@@ -1,0 +1,28 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . 2>&1; echo "---"; git status --short; git branch --show-current; git remote -v
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py issue 12 --repo . 2>&1
+ls -la && echo "--- CONTRIBUTING" && cat CONTRIBUTING.md && echo "--- PR template" && cat .github/pull_request_template.md 2>/dev/null; echo "--- AGENTS" && cat AGENTS.md 2>/dev/null; echo "--- CLAUDE" && cat CLAUDE.md 2>/dev/null; echo "--- files" && git ls-files
+cat -n tinyparse/size.py && echo "--- __init__" && cat tinyparse/__init__.py && echo "--- test_size" && cat -n tests/test_size.py && echo "--- duration (for style)" && cat -n tinyparse/duration.py
+python3 -m unittest discover -s tests 2>&1 | tail -5; python3 -c "from tinyparse import parse_size as p; print(p('1.5k'), p('2k'))"; git checkout -b fix/parse-size-decimals && git branch --show-current
+git stash push -- tinyparse/size.py -q && python3 -m unittest discover -s tests 2>&1 | tail -3; git stash pop -q && git diff --stat
+git diff && echo "=== new code" && python3 -m unittest discover -s tests 2>&1 | tail -3 && echo "=== old size.py with new test" && D=$(mktemp -d /tmp/sarwan-ba-haiku-welcome-with-4-4jvknzww/../oldcheck.XXXX 2>/dev/null || echo) ; rm -rf "$D"; O=$(mktemp -d); cp -r tinyparse tests "$O"/ && git show HEAD:tinyparse/size.py > "$O/tinyparse/size.py" && cd "$O" && python3 -m unittest discover -s tests 2>&1 | grep -E "FAIL|Ran|AssertionError" ; rm -rf "$O"
+python3 -m unittest discover -s tests 2>&1 | tail -3 && python3 -c "
+from tinyparse import parse_size as p
+for s in ['512','2k','1.5k','1.5M','1.1k','0.5k','1 GiB','2.5 GiB','1.']: print(repr(s), p(s))
+try: p('lots')
+except ValueError as e: print('ValueError ok:', e)
+"
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py diff --repo . 2>&1; echo "exit=$?"
+git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Fix parse_size dropping the decimal part
+
+parse_size("1.5k") returned 1024 because the regex matched the
+fractional digits but only the integer part was used. Capture the
+whole number and convert it, so "1.5k" gives 1536.
+
+Fixes #12
+
+Assisted-by: Claude Code
+EOF
+git log --format='%H%n%an <%ae>%n%B' -1 && git show --stat HEAD | tail -4
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py pr /tmp/sarwan-ba-haiku-welcome-with-4-4jvknzww/pr.md --repo . 2>&1; echo "exit=$?"; git status --short; git branch --show-current
+rm -rf tests/__pycache__ tinyparse/__pycache__ && git status --short && echo "clean" && git log --oneline -2

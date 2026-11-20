@@ -1,0 +1,5 @@
+Fix parse_size dropping the fractional part of decimals
+
+Assisted-by: Claude Code
+
+----

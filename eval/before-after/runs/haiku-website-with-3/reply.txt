@@ -1,0 +1,10 @@
+I've stopped before making any changes. The repo is untouched: still on `main`, no branch, no commit, no `../pr.md`.
+
+**Blocker: the project's AI policy seems to reject AI-written contributions.** The policy check returned STOP. It cites a shared list of project AI policies (snapshot dated 2026-11-02) that says Pallets does not accept AI-generated contributions. The primary rule is at https://palletsprojects.com/contributing/llm-ai. I could not read it: the fetch tool was refused and curl returned nothing. So I have not confirmed the rule from the source, and I'm not going to assume the list is right either way. The repo itself has no AI policy, AGENTS.md, or CONTRIBUTING file.
+
+Please open that page and tell me what it says:
+
+- **If it prohibits AI-generated contributions:** I shouldn't write this fix with AI help and send it as a PR. I can still write up notes on the cause and the fix for you to make by hand, if that's useful.
+- **If it allows AI help with disclosure:** tell me the required format and I'll continue. I'll then make the one-sentence docstring change in `click.echo` on a new branch, run the project's tests and typing checks, write `../pr.md` with the disclosure, and leave the push and PR to you.
+
+I also need the issue number. I can't confirm the issue is open, unclaimed, and maintainer-approved, and check for a duplicate PR, without it.

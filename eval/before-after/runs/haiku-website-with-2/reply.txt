@@ -1,0 +1,10 @@
+I stopped before changing anything, so there is no branch, commit, or `../pr.md` yet.
+
+**The project's AI policy appears to reject this kind of contribution.** The skill's checker found a shared list of project AI policies (snapshot 2026-11-02) that says Pallets does not accept AI-generated contributions. It links to https://palletsprojects.com/contributing/llm-ai. I could not read that page myself: the fetch was refused by the proxy. The clone has no AI policy in CONTRIBUTING.rst, the docs, README, or `.github`, so the only source is that linked page.
+
+Two things I need from you before going on:
+
+1. **Read the linked policy yourself** and tell me whether it covers this change. If it says AI-assisted PRs are not accepted, I won't write the fix. The skill rules are clear that I shouldn't reword or split the work to get around it.
+2. **Tell me how much of the change is yours.** If you wrote the fix yourself and only used me for review or tests, that may fit the policy, but I'd want to see the wording before we decide.
+
+If the policy allows it, here is the plan. The issue is the `click.echo` docstring in `src/click/utils.py` (line 240). I would add one sentence saying `nl=False` keeps the output on the same line, so the next output continues it. Before I open the PR text, I would also look for a maintainer-approved issue for this, since the skill says to work only on issues maintainers want. The `docs` label suggests it qualifies, but I haven't checked the issue state, claims, or open PRs. I'd need the issue number for that.

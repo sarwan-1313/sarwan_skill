@@ -1,0 +1,12 @@
+Fix parse_size dropping the fractional part
+
+parse_size("1.5k") returned 1024 because the fractional digits were
+matched but never captured, and the integer part alone was multiplied.
+Capture the full decimal and multiply it exactly with Decimal, so
+"1.5k" gives 1536. Results are still truncated to whole bytes.
+
+Fixes #12
+
+Assisted-by: Claude Haiku 5.5
+
+----

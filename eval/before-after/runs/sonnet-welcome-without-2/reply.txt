@@ -1,0 +1,8 @@
+The fix is committed on a new branch, `fix-parse-size-decimals`, and the PR description is at `../pr.md`. I didn't push or open anything.
+
+- **Cause:** the regex in `tinyparse/size.py` captured only the integer part of the number, so `"1.5k"` was read as `1k`.
+- **Fix:** the regex now captures the whole number, and the multiplication uses `Fraction` so there's no float rounding. `parse_size("1.5k")` now returns 1536. The result is still an `int`, so a fractional byte is truncated (`"1.5"` gives 1).
+- **Tests:** I added cases for `"1.5k"`, `"1.5M"` and `"0.5 KiB"`. All 7 tests in the suite pass.
+- **Attribution:** CONTRIBUTING.md asks for an `Assisted-by:` trailer and says not to use `Co-authored-by` for AI tools. The commit has `Assisted-by: Claude Code` and no `Co-Authored-By` line. The PR's "AI assistance" section says the same.
+- **Left uncommitted:** the `__pycache__` folders are untracked and I didn't add them.
+- **Before you submit:** the PR text says you reviewed and tested the change yourself, so check that it's true for you.

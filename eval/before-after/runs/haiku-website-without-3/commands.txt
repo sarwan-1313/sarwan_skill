@@ -1,0 +1,13 @@
+git status --short && git branch --show-current && grep -n "def echo" -A 60 src/click/utils.py | head -90
+git checkout -b docs-echo-nl-false && python -m pytest tests/test_utils.py -q 2>&1 | tail -3; git diff --stat; git log -3 --format='%h %s' -- src/click/utils.py
+PYTHONPATH=src python -c "import click.utils as u; print(u.echo.__doc__[u.echo.__doc__.index(':param nl'):][:200])" && git diff && git config user.name; git config user.email
+git add src/click/utils.py && git commit -q -F - <<'EOF'
+Document what nl=False does in echo
+
+The echo docstring did not say what happens when nl is disabled.
+Explain that the output stays on the same line, so the next output
+continues it.
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+EOF
+git log -1 --format='%h %s%n%n%b' && git status --short

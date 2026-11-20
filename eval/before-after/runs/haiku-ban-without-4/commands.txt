@@ -1,0 +1,19 @@
+git status --short && git branch --show-current && ls -la && find . -name "*.py" -not -path "./.git/*" | head -50 && cat CONTRIBUTING.md 2>/dev/null | head -80
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat .github/* && echo ---- && cat README.md pyproject.toml && git log --oneline -3
+python3 -m unittest discover -s tests 2>&1 | tail -3; python3 -c "
+from tinyparse import parse_size; print(parse_size('1.5k'), parse_size('2k'))"; git checkout -b fix/parse-size-decimals && echo ok
+python3 -m unittest discover -s tests 2>&1 | tail -3 && python3 -c "
+from tinyparse import parse_size as p
+for s in ['2k','1.5k','512','1.5 KiB','1.','0.5M']: print(repr(s), p(s))
+for s in ['.5k','1.2.3k','lots']:
+    try: print(s, p(s))
+    except ValueError as e: print('ValueError', e)
+" && git diff --stat && git add tinyparse/size.py tests/test_size.py && git commit -q -m "Fix parse_size dropping the fractional part of decimal sizes
+
+parse_size(\"1.5k\") returned 1024 because the regex matched the
+fraction without capturing it. Capture the full decimal number and
+multiply with Decimal so the result is exact.
+
+Fixes #12
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>" && git log --oneline -1 && git show --stat HEAD | tail -3

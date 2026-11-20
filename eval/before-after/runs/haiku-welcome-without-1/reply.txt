@@ -1,0 +1,12 @@
+The fix for issue #12 is committed on the new branch `fix/parse-size-decimals`, and the PR description is at `/tmp/sarwan-ba-haiku-welcome-without-1-mx95ol8r/pr.md`. Nothing is pushed and no PR is open.
+
+**The bug:** the regex in `tinyparse/size.py` matched the decimal part of "1.5k" but never captured it, so the value was read as "1k".
+
+**The fix:** the regex now captures the whole number, and the result is computed with `Decimal` so the fraction is kept. "1.5k" gives 1536.
+
+**Tests:** I added `test_decimal_amounts` first and watched it fail (1024 != 1536). After the fix, all 8 tests pass. Whole numbers are unchanged, and malformed input is still rejected.
+
+Choices you should check:
+- **Rounding:** a fraction that doesn't land on a whole byte is rounded down, so "1.3k" gives 1331. This is noted in the docstring and the PR description.
+- **Commit trailer:** `CONTRIBUTING.md` asks for `Assisted-by: Claude Code` and says not to use `Co-authored-by` for AI tools. I followed the project's rule, not the `Co-Authored-By: Claude Haiku 5.5` trailer my instructions asked for. If you want the other trailer, it's a quick amend.
+- **PR description:** it follows the repo's template, and I filled in the AI-assistance section. It ends with the "Generated with Claude Code" line from my instructions.

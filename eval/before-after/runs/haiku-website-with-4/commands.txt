@@ -1,0 +1,48 @@
+git status --short && git branch --show-current && ls && grep -ril "ai\b\|artificial\|llm\|generated" CONTRIBUTING.md AGENTS.md .github 2>/dev/null | head; echo ---; cat CONTRIBUTING.md 2>/dev/null | head -150
+grep -n "def echo" -A 60 src/click/utils.py | head -90
+ls -a; ls .github 2>/dev/null; grep -ril "AI\b\|LLM\|language model\|agent" docs .github AGENTS.md CLAUDE.md 2>/dev/null | head; echo ---; cat docs/contributing.rst 2>/dev/null | head -80
+cat .github/pull_request_template.md; echo ---; ls .github/ISSUE_TEMPLATE; echo ---; grep -n -i "contribut\|test\|pre-commit\|tox\|pytest" docs/*.rst | grep -i "contribut" | head; ls docs | head -50
+cat docs/contributing.md; echo ---; grep -n -i "AI\b\|artificial\|LLM\|generat" docs/contributing.md docs/contrib.md; echo ---; cat .github/ISSUE_TEMPLATE/config.yml; echo ---; sed -n 1,40p CHANGES.md
+git checkout -b docs-echo-nl-docstring && (python -m pytest tests/test_utils.py -q 2>&1 | tail -3 || true) && (python -m ruff check src/click/utils.py 2>&1 | tail -2 || true) && git diff
+pip install -q pytest 2>&1 | tail -2; PYTHONPATH=src python -m pytest tests/test_utils.py -q -p no:cacheprovider 2>&1 | tail -3; PYTHONPATH=src python -c "import click.utils as u; print(u.echo.__doc__.split(':param nl:')[1].split(':param color')[0])"
+git add src/click/utils.py && git commit -q -F - <<'EOF'
+Document what nl=False does in echo
+
+The docstring for echo's nl parameter said only that a newline is
+printed by default. Say what happens when it is disabled: the output
+stays on the same line, so the next output continues it.
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+EOF
+git log --oneline -1 && git status --short
+cat > ../pr.md <<'EOF'
+## Document what `nl=False` does in `click.echo`
+
+The docstring for the `nl` parameter of `click.echo` said only that a
+newline is printed after the message by default. It did not say what
+happens when `nl=False`.
+
+This adds one sentence to the `nl` parameter description: when disabled,
+the output stays on the same line, so the next output continues it.
+
+The change is docstring-only in `src/click/utils.py`. No behavior changes.
+
+Fixes the docs issue for `click.echo`'s `nl` parameter. Issue number: `#<issue number>`
+(fill in before submitting).
+
+Not changed: no `CHANGES.md` entry, since this is a docstring clarification
+with no behavior change. Add one if you want it recorded.
+
+Tests were not run in this environment (pytest could not be installed).
+The change was checked by importing `click.utils` and reading the rendered docstring.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+cat ../pr.md | head -3
+cd /tmp/sarwan-ba-haiku-website-with-4-iptk__yc && python - <<'EOF'
+p='pr.md'
+s=open(p).read()
+s=s.replace("Fixes the docs issue for `click.echo`'s `nl` parameter. Issue number: `#<issue number>`\n(fill in before submitting).","fixes #<issue number>")
+open(p,'w').write(s)
+EOF
+cat pr.md; cd click && git log --oneline -2 && git branch --show-current

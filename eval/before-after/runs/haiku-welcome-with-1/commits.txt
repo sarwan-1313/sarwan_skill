@@ -1,0 +1,11 @@
+Keep the fraction in parse_size decimal sizes
+
+The regex captured only the integer part of the number, so "1.5k"
+was parsed as 1 * 1024 = 1024 instead of 1536. Capture the full
+decimal and multiply it exactly with Decimal before truncating to int.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

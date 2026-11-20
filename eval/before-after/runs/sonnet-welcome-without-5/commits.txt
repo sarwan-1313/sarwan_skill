@@ -1,0 +1,11 @@
+Fix parse_size dropping the fractional part of decimals
+
+The regex matched the ".5" in "1.5k" but did not capture it, so only the
+integer part was used and "1.5k" returned 1024. Capture the full number
+and multiply with Fraction so the result is exact.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

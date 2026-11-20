@@ -1,0 +1,13 @@
+The fix is committed on the new branch `docs-echo-nl-false` (commit `9312d4a`), and the PR description is at `/tmp/sarwan-ba-haiku-website-with-5-q0no9bxo/pr.md`. Nothing is pushed and no PR is open.
+
+**The change:** I added one sentence to the `nl` parameter in `echo`'s docstring, in `src/click/utils.py`:
+
+> When disabled, the output stays on the same line, so the next output continues it.
+
+It's a two-line docstring change. I checked the behavior first: `echo("a", nl=False)` followed by `echo("b")` writes `ab\n`.
+
+**Before you submit:**
+- **Issue number:** `pr.md` has a placeholder `Fixes #<issue number>`. I don't know the issue number, so please fill it in.
+- **Tests:** I couldn't run pytest because the sandbox has no network access. `ruff check` and `ruff format --check` pass. The change is docstring-only, so there's no new behavior to test.
+- **CHANGES.md:** I didn't add an entry, since this clarifies documentation and changes no behavior. The project's PR template asks for one per change, so you may want to add it. The PR description says so.
+- **AI disclosure:** The repo has no AI contribution policy and no disclosure requirement, so I added none beyond the Claude Code footer that was requested.

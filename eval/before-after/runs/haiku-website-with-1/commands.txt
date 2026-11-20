@@ -1,0 +1,4 @@
+git status --short && git branch --show-current && ls && (ls .github 2>/dev/null; cat CONTRIBUTING.rst 2>/dev/null | head -150; cat AGENTS.md 2>/dev/null; cat .github/pull_request_template.md 2>/dev/null)
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . 2>&1; echo "---"; ls -la .github/ .github/ISSUE_TEMPLATE 2>/dev/null; echo "---"; ls docs | head -50; echo "---"; git remote -v
+grep -rniE "ai|llm|generated|assist" docs/contributing.md | head -30; echo "---"; grep -niE "ai|llm" README.md | head -10
+curl -sL --max-time 20 https://palletsprojects.com/contributing/llm-ai | sed -e 's/<[^>]*>//g' | grep -v '^\s*$' | head -80 2>&1; echo "exit=$?"

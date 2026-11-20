@@ -1,0 +1,24 @@
+git status --short && git branch --show-current && grep -n "def echo" -A 60 src/click/utils.py | head -90
+git checkout -b docs/echo-nl-false && python -m pytest tests/test_utils.py -q 2>&1 | tail -3; (python -m pre_commit --version >/dev/null 2>&1 && python -m pre_commit run --files src/click/utils.py) ; (python -m ruff check src/click/utils.py 2>&1 | tail -2); git diff --stat && git log --oneline -3 && git log -5 --format='%s' | head -5
+python -m py_compile src/click/utils.py && echo COMPILES && git diff && git add src/click/utils.py && git commit -q -F - <<'EOF'
+Document what `nl=False` does in `echo`
+
+The `nl` parameter of `click.echo` did not say what happens when it is
+disabled. Add a sentence explaining that the output stays on the same
+line so the next output continues it.
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+EOF
+git log --oneline -1
+cat > ../pr.md <<'EOF'
+## Document what `nl=False` does in `echo`
+
+The `nl` parameter of `click.echo` says to print a newline after the message, but it does not say what happens when it is disabled.
+
+This adds one sentence to the `nl` parameter docs: when disabled, the output stays on the same line, so the next output continues it.
+
+Docstring-only change in `src/click/utils.py`. Closes the "docs" issue about `click.echo`'s `nl=False` behavior.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+cat ../pr.md | head -3; git status --short

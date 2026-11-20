@@ -1,0 +1,17 @@
+git status && git log --oneline | head -5 && ls -la && grep -rn "parse_size\|def format_size\|_UNITS\|k\b" --include=*.py . | head -50
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat CONTRIBUTING.md && echo ---- && ls .github && cat .github/* && echo ---- && cat pyproject.toml && git branch -a && git remote -v
+python3 --version && python3 -m unittest discover -s tests 2>&1 | tail -5 && python3 -c "from tinyparse import parse_size as p; print(p('1.5k'), p('2k'), p('1.5M'), p('0.5k'))"
+python3 -m unittest discover -s tests 2>&1 | tail -4 && git stash -q && python3 -m unittest discover -s tests 2>&1 | tail -3; git stash pop -q && git status --short && python3 -c "print(2.25*1024**3)"
+cp tinyparse/size.py "$TMPDIR/size_fixed.py" 2>/dev/null; git show HEAD:tinyparse/size.py > tinyparse/size.py && python3 -m unittest discover -s tests 2>&1 | grep -E "FAIL|Ran|FAILED"; git checkout -q -- tinyparse/size.py && git stash list | head -1; python3 -m unittest discover -s tests 2>&1 | tail -1; rm -rf tests/__pycache__ tinyparse/__pycache__; git status --short
+python3 -m unittest discover -s tests 2>&1 | tail -3 && rm -rf tests/__pycache__ tinyparse/__pycache__ && git diff --stat && git checkout -b fix/parse-size-decimal-units && git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Fix parse_size dropping the fractional part of decimal sizes
+
+parse_size("1.5k") returned 1024 because the regex matched the decimal
+part but only the integer digits were used. Parse the full number with
+Decimal and reject results that are not a whole number of bytes.
+
+Fixes #12
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+EOF
+git log --oneline -2 && git status --short && python3 -c "import sys; sys.path.insert(0,'.'); from tinyparse import parse_size as p; print(p('1.5k'), p('2k'))"

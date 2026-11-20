@@ -1,0 +1,12 @@
+The fix is committed on a new branch, `fix-parse-size-decimals`, and the PR description is in `../pr.md`. I haven't pushed anything or opened a PR.
+
+- **Cause:** the regex in `tinyparse/size.py` matched the decimal part (`.5`) but didn't capture it, so `"1.5k"` was treated as `"1k"`.
+- **Fix:** the regex now captures the whole number, and the result is computed with `Fraction` so it stays exact. A fractional byte count is truncated to an int, as before.
+- **Test:** I added `test_decimals` to `tests/test_size.py`, covering `1.5k`, `0.5M` and `2.k`.
+- **Checks:** I ran `python3 -m unittest discover -s tests` (the command CONTRIBUTING asks for) and all 8 tests pass. The skill's diff and PR-text checks came back clean.
+- **Rules:** CONTRIBUTING welcomes AI-assisted contributions if they're disclosed. The commit message ends with `Assisted-by: Claude Code` and has no `Co-authored-by` line. `../pr.md` follows the project's PR template and includes an AI-assistance line.
+
+**For your review**
+- I couldn't check issue #12 on GitHub because `gh` isn't logged in. I'm relying on your word that it's labeled "accepted". Please also check that no one has claimed it and that no open PR already fixes it.
+- I did not add a `Signed-off-by` line, since that's yours to certify.
+- Please read the diff and `../pr.md` before you submit.

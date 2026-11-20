@@ -1,0 +1,12 @@
+Fix parse_size dropping the fractional part
+
+The regex matched the integer digits of "1.5k" as "1" and discarded
+the ".5", so parse_size("1.5k") returned 1024 instead of 1536.
+Capture the full decimal number and compute with Decimal so the
+result is exact before truncating to an int.
+
+Fixes #12
+
+Assisted-by: Claude Haiku 5.5
+
+----

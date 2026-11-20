@@ -1,0 +1,10 @@
+The fix is committed on a new branch, `fix-parse-size-decimals`, and the PR description is at `../pr.md`. I haven't pushed anything or opened the PR.
+
+- **Cause:** the regex in `tinyparse/size.py` matched the digits after the decimal point but didn't capture them, so `1.5k` was read as `1k`.
+- **Fix:** the regex now captures the whole number, and `parse_size` multiplies it with `Fraction` so the result is exact. The result is truncated to an int.
+- **Tests:** I reproduced the bug first (`1.5k` gave 1024). I added `test_decimals` to `tests/test_size.py`, and `python3 -m unittest discover -s tests` passes with 8 tests. The skill's `check.py diff` and `check.py pr` runs both came back clean.
+- **Disclosure:** CONTRIBUTING asks for an `Assisted-by:` trailer and forbids listing AI tools as `Co-authored-by`. The commit has `Assisted-by: Claude Code`. I left out the `Co-Authored-By` line that my own default attribution would add, because the project's rule overrides it. The PR text includes the AI-assistance section from their template.
+- **Issue check:** I couldn't confirm the `accepted` label on #12, because the GitHub CLI isn't logged in here. I took your word for it. Please check that no one has claimed the issue and that there's no open PR for it.
+- **Stray files:** there are untracked `__pycache__` folders from running the tests. They aren't committed.
+
+I didn't add a `Signed-off-by` line, since only you can certify the work.

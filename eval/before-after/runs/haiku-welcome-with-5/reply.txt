@@ -1,0 +1,14 @@
+The fix is committed on branch `fix/parse-size-decimal` (commit `75c35d8`), and the PR description is at `/tmp/sarwan-ba-haiku-welcome-with-5-ddnxqenc/pr.md`. Nothing is pushed and no PR is open.
+
+**The bug:** the size regex matched the fraction in `"1.5k"` but threw it away before `int()`, so the result was 1 × 1024.
+
+**The fix** (`tinyparse/size.py`): the regex now keeps the whole number, and the number is parsed as a `Decimal` and multiplied by the unit before converting to `int`. `"1.5k"` now returns 1536. Whole numbers are unchanged, and `Decimal` works on the project's Python 3.8 floor.
+
+**Tests:** I added `test_decimals` to `tests/test_size.py`. `python3 -m unittest discover -s tests` passes 8 tests on Python 3.13, up from 7. I did not run it on Python 3.8.
+
+**Decisions for you to check:**
+- **Issue #12 not verified on GitHub.** `gh` isn't authenticated here, so I couldn't confirm the issue is labeled `accepted` or that nobody has claimed it or opened a PR for it. I went by the text you gave me. Please check those before you submit.
+- **No `Co-Authored-By` line.** Your reminder asked for `Co-Authored-By: Claude Haiku 5.5`, but CONTRIBUTING.md says not to list AI tools as co-authors. I followed the project rule and used `Assisted-by: Claude Code (Claude Haiku 5.5)`, which is the disclosure format the project asks for. If you want the co-author line anyway, tell me and I'll amend the commit.
+- **Fractional bytes are truncated.** `"1.5"` with no unit still returns 1, as it did before. I left that alone to keep the change small.
+
+The skill's checks on the diff and the PR text found nothing. The PR text fills in the template, and its "Fixes #12" line is written to close the issue when merged.

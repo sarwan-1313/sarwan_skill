@@ -1,0 +1,12 @@
+I've stopped before changing anything. The policy check came back **STOP**, and I need you to confirm how to proceed.
+
+A shared list of project AI policies (snapshot 2026-11-02) says Pallets, the organisation behind Click, does not accept AI-generated contributions. The policy it points to is here: https://palletsprojects.com/contributing/llm-ai
+
+Neither the repository nor the checker could confirm that policy's current text. The repo has no AI policy file, and the checker doesn't fetch web pages. Please open that page and read it yourself.
+
+- **If the policy bans AI-generated contributions:** I shouldn't write this fix or prepare the PR, and I won't reword or split the work to get around the rule. The issue is one sentence in the `click.echo` docstring (`src/click/utils.py`). You could write it yourself and submit it as your own work. I won't draft the text.
+- **If the policy allows AI help, or the list is out of date:** tell me, and I'll continue. That means a new branch, a one-sentence docstring change, the project's checks, a commit, and `../pr.md` with the disclosure the policy asks for.
+
+I haven't created a branch, edited a file or committed anything. The only thing I ran was the read-only policy check, plus a look at the current `echo` docstring. I also haven't yet checked whether the issue is claimed or already has a pull request open.
+
+Which way do you want to go?

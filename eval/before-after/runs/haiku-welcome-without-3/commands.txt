@@ -1,0 +1,74 @@
+git status --short && git log --oneline | head -5 && ls -la && cat CONTRIBUTING.md 2>/dev/null; find . -name "*.py" -not -path "./.git/*" | head -50
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat .github/* && echo ---- && cat README.md pyproject.toml && git config user.name; git config user.email; git branch -a
+python3 --version && python3 -c "from tinyparse import parse_size as p; print(p('1.5k'), p('2k'))" && python3 -m unittest discover -s tests 2>&1 | tail -3
+git checkout -b fix/parse-size-decimals && cat > tinyparse/size.py <<'EOF'
+"""Sizes such as "512", "10k" or "1.5M", in bytes (powers of 1024)."""
+import re
+from decimal import Decimal
+
+UNITS = {"": 1, "k": 1024, "m": 1024 ** 2, "g": 1024 ** 3, "t": 1024 ** 4}
+_SIZE = re.compile(r"^\s*(\d+(?:\.\d*)?)\s*([kmgt]?)i?b?\s*$", re.IGNORECASE)
+
+
+def parse_size(text):
+    """Return the number of bytes in a size string such as "512", "10k" or "1.5M"."""
+    m = _SIZE.match(text)
+    if not m:
+        raise ValueError(f"not a size: {text!r}")
+    number, unit = m.groups()
+    return int(Decimal(number) * UNITS[unit.lower()])
+
+
+def format_size(n):
+    """Format a number of bytes the short way: 1536 -> "1.5k"."""
+    for unit in ("t", "g", "m", "k"):
+        if n >= UNITS[unit]:
+            value = n / UNITS[unit]
+            return f"{value:.1f}".rstrip("0").rstrip(".") + unit
+    return str(n)
+EOF
+git diff --stat
+python3 -m unittest discover -s tests -v 2>&1 | tail -15 && git stash -q && python3 -m unittest discover -s tests 2>&1 | tail -3; git stash pop -q && git status --short
+cp tinyparse/size.py "$TMPDIR/fixed_size.py" 2>/dev/null || cp tinyparse/size.py /tmp/sarwan-ba-haiku-welcome-without-3-5491m5iw/fixed_size.py.bak; git show HEAD:tinyparse/size.py > tinyparse/size.py && python3 -m unittest discover -s tests 2>&1 | grep -E "FAIL|Ran|OK"; git checkout -q -- tinyparse/size.py 2>/dev/null; cp /tmp/sarwan-ba-haiku-welcome-without-3-5491m5iw/fixed_size.py.bak tinyparse/size.py 2>/dev/null; git diff --stat; rm -f /tmp/sarwan-ba-haiku-welcome-without-3-5491m5iw/fixed_size.py.bak
+ls "$TMPDIR" /tmp/sarwan-ba-haiku-welcome-without-3-5491m5iw/ 2>&1 | head; grep -n "Decimal\|\\\\d+" tinyparse/size.py
+cat > tinyparse/size.py <<'EOF'
+"""Sizes such as "512", "10k" or "1.5M", in bytes (powers of 1024)."""
+import re
+from decimal import Decimal
+
+UNITS = {"": 1, "k": 1024, "m": 1024 ** 2, "g": 1024 ** 3, "t": 1024 ** 4}
+_SIZE = re.compile(r"^\s*(\d+(?:\.\d*)?)\s*([kmgt]?)i?b?\s*$", re.IGNORECASE)
+
+
+def parse_size(text):
+    """Return the number of bytes in a size string such as "512", "10k" or "1.5M"."""
+    m = _SIZE.match(text)
+    if not m:
+        raise ValueError(f"not a size: {text!r}")
+    number, unit = m.groups()
+    return int(Decimal(number) * UNITS[unit.lower()])
+
+
+def format_size(n):
+    """Format a number of bytes the short way: 1536 -> "1.5k"."""
+    for unit in ("t", "g", "m", "k"):
+        if n >= UNITS[unit]:
+            value = n / UNITS[unit]
+            return f"{value:.1f}".rstrip("0").rstrip(".") + unit
+    return str(n)
+EOF
+python3 -m unittest discover -s tests 2>&1 | tail -3; python3 -c "from tinyparse import parse_size as p; print(p('1.5k'), p('2k'), p('0.5g'), p('1.9k'))"; git diff --stat; rm -rf tests/__pycache__ tinyparse/__pycache__; git status --short
+git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Fix parse_size dropping the fraction of decimal sizes
+
+The regex matched the decimal part of a size but did not capture it,
+so "1.5k" was parsed as "1" and returned 1024 instead of 1536.
+
+Capture the full decimal number and multiply it with Decimal so the
+fraction is kept exactly, then truncate to whole bytes as before.
+
+Fixes #12
+
+Assisted-by: Claude Code
+EOF
+git log --oneline -4 && git show --stat HEAD | tail -4 && git status --short

@@ -1,0 +1,3 @@
+I added the sentence to the `nl` parameter in the `click.echo` docstring (`src/click/utils.py`) and committed it on a new branch, `docs-echo-nl`. The new text reads: "If ``False``, the output stays on the same line, so the next output continues it."
+
+The pull request description is in `../pr.md`. Nothing is pushed and no PR is open. It's a docstring-only change, so I didn't run any tests, and I didn't add a changelog entry. If the project wants one for docs fixes, you'll need to add it.

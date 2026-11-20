@@ -1,0 +1,2 @@
+git status && git branch -a && ls -la && cat CONTRIBUTING.md 2>/dev/null; ls .github 2>/dev/null && cat .github/*.md 2>/dev/null; cat AGENTS.md CLAUDE.md 2>/dev/null
+cat tinyparse/size.py

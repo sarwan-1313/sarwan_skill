@@ -1,0 +1,61 @@
+{
+  "description": "sarwan_skill guard: checks a contribution before git push, a pull request, a patch email or a new issue to someone else's project.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git push*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh pr create*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "if": "Bash(glab mr create*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "if": "Bash(git send-email*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "if": "Bash(b4 send*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh issue create*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "if": "Bash(glab issue create*)",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/sarwan-skill/scripts/guard.py", "claude-code"],
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

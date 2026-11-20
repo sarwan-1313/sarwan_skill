@@ -1,0 +1,2 @@
+git status && git log --oneline | head -5 && ls -la && cat CONTRIBUTING.md 2>/dev/null; cat .github/PULL_REQUEST_TEMPLATE.md 2>/dev/null; find . -path ./.git -prune -o -type f -name '*.py' -print
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py

@@ -1,0 +1,12 @@
+Fix parse_size dropping the fractional part
+
+The regex matched the decimal part of a size but did not capture it, so
+parse_size("1.5k") returned 1024 instead of 1536. The number is now
+parsed as a Decimal and scaled exactly. A result that is not a whole
+number of bytes (e.g. "1.0001k") raises ValueError.
+
+Fixes #12
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+
+----

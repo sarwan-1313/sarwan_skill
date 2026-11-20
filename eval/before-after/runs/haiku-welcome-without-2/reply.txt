@@ -1,0 +1,12 @@
+The fix is committed on branch `fix/parse-size-decimal` (commit `9891d4f`), and the PR description is at `/tmp/sarwan-ba-haiku-welcome-without-2-8fdm56bi/pr.md`. I didn't push or open the PR.
+
+**The bug:** the regex in `tinyparse/size.py` matched the decimal part of a size but didn't capture it, so `int("1.5")` silently dropped the `.5`. I reproduced it: `parse_size("1.5k")` returned `1024`.
+
+**The fix:** the regex now captures the full number, and the value is multiplied as a `Decimal` so fractions stay exact, then truncated to whole bytes. `"1.5k"` now returns `1536`, and whole numbers like `"2k"` are unchanged.
+
+**Tests:** I added `test_decimal_units` covering `"1.5k"`, `"0.5k"`, `"1.5 MiB"` and `"2.25G"`. It fails on the old code and passes with the fix. The full suite passes (8 tests).
+
+**Decisions for you to check:**
+- **Attribution:** your harness asked for a `Co-Authored-By: Claude Haiku 5.5` trailer, but the repo's CONTRIBUTING.md says to use `Assisted-by:` and not list AI tools as co-authors. I followed the project's rule, so the commit ends with `Assisted-by: Claude Code`. The PR description ends with the "Generated with Claude Code" line you asked for.
+- **Branch name:** I picked `fix/parse-size-decimal`.
+- **Truncation:** a fraction of a byte is dropped (e.g. `"1.0001"` gives `1`), since sizes are whole bytes. This matches the existing behaviour for that edge case.

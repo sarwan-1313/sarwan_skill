@@ -1,0 +1,50 @@
+S=<sarwan_skill>/skills/sarwan-skill/scripts/check.py; python3 $S policy --repo . ; python3 $S issue 12 --repo . ; ls -a; git remote -v
+cat CONTRIBUTING.md .github/pull_request_template.md; ls tinyparse tests; cat tinyparse/size.py 2>/dev/null || grep -rn "def parse_size" tinyparse
+cat tests/test_size.py; python3 -m unittest discover -s tests 2>&1 | tail -3
+git checkout -q -b fix-parse-size-decimals && python3 - <<'E'
+p='tinyparse/size.py'
+s=open(p).read()
+s=s.replace('import re\n','import re\nfrom fractions import Fraction\n',1)
+s=s.replace(r'(\d+)(?:\.\d*)?\s*',r'(\d+(?:\.\d*)?)\s*')
+s=s.replace('return int(number) * UNITS','return int(Fraction(number) * UNITS')
+s=s.replace('UNITS[unit.lower()]\n','UNITS[unit.lower()])\n',1)
+open(p,'w').write(s)
+p='tests/test_size.py'
+s=open(p).read()
+s=s.replace('''    def test_rejects''','''    def test_decimals(self):
+        self.assertEqual(parse_size("1.5k"), 1536)
+        self.assertEqual(parse_size("0.5M"), 512 * 1024)
+        self.assertEqual(parse_size("2.GiB"), 2 * 1024 ** 3)
+
+    def test_rejects''',1)
+open(p,'w').write(s)
+E
+git diff; python3 -m unittest discover -s tests 2>&1 | tail -3
+git add -A && git commit -q -m "Fix parse_size dropping the fractional part
+
+parse_size(\"1.5k\") returned 1024 because the regex discarded the
+digits after the decimal point. Parse the full number exactly and
+scale it by the unit.
+
+Fixes #12
+
+Assisted-by: Claude Code" && cat > ../pr.md <<'E'
+## What does this change?
+
+`parse_size` now keeps the fractional part of the number, so `parse_size("1.5k")` returns 1536 instead of 1024. The regex captured only the integer digits; it now captures the whole number, and the result is computed with `fractions.Fraction` (exact, no float rounding) and truncated to an int. Added a `test_decimals` test.
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+Ran `python3 -m unittest discover -s tests`: 8 tests pass, including the new decimal cases (`1.5k`, `0.5M`, `2.GiB`).
+
+## AI assistance
+
+I used Claude Code to help write this fix and the test; I reviewed and ran every change. The commit has an `Assisted-by: Claude Code` trailer.
+E
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py all --repo . --pr ../pr.md; git status --short; git log --oneline -1
+git show --stat --format=%an%n%B HEAD
+git rm -rq --cached tests/__pycache__ tinyparse/__pycache__ && git commit -q --amend --no-edit && git show --stat --format=%s HEAD && git status --short

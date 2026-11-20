@@ -1,0 +1,15 @@
+git status --short && git branch --show-current && grep -n "def echo" -A 60 src/click/utils.py | head -90
+sed -n 1,30p CHANGES.rst && grep -n -i "changes\|changelog" CONTRIBUTING.rst | head
+ls && ls docs | head -50 && (sed -n 1,25p docs/changes.rst 2>/dev/null; grep -n -i "changes" CONTRIBUTING.rst 2>/dev/null | head)
+sed -n 1,20p CHANGES.md && grep -n -i "changes\|changelog" docs/contributing.md | head && git log --oneline -5 -- CHANGES.md
+(uv run --offline ruff check src/click/utils.py 2>&1 || python -m ruff check src/click/utils.py 2>&1 || echo "ruff unavailable") | tail -3 && git diff && git checkout -b docs-echo-nl-false && git add src/click/utils.py && git commit -q -F - <<'EOF'
+Document what nl=False does in echo
+
+The docstring of click.echo did not say what happens when nl is
+disabled. Add a sentence saying the output stays on the same line, so
+the next output continues it.
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+EOF
+git log --oneline -1 && git show --stat HEAD | tail -3
+python -m pytest tests/test_utils.py -q -k echo 2>&1 | tail -3

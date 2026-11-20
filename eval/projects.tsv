@@ -1,0 +1,73 @@
+set	repository	policy_path	list_label
+tuning	alacritty/alacritty		no
+tuning	python-attrs/attrs		yes
+tuning	zulip/zulip		yes
+tuning	apache/couchdb		no
+tuning	ggml-org/llama.cpp		none
+tuning	typescript-eslint/typescript-eslint		yes
+tuning	qemu/qemu		no
+tuning	servo/servo		no
+tuning	numpy/numpy		yes
+tuning	psf/requests		yes
+tuning	curl/curl		yes
+tuning	scikit-learn/scikit-learn		yes
+tuning	ghostty-org/ghostty		yes
+tuning	astral-sh/ruff		yes
+tuning	pallets/flask		no
+tuning	django/django		yes
+round1	flutter/flutter	docs/contributing/Tree-hygiene.md	yes
+round1	libsdl-org/SDL_net	AGENTS.md	no
+round1	endless-sky/endless-sky	docs/CONTRIBUTING.md	no
+round1	qutip/qutip	CONTRIBUTING.md	yes
+round1	teamtype/teamtype	CONTRIBUTING.md	no
+round1	pola-rs/polars	AI_POLICY.md	yes
+round1	OpenTTD/OpenTTD	CONTRIBUTING.md	no
+round1	idris-lang/Idris2	CONTRIBUTING.md	no
+round1	moongardenmods/allium	CONTRIBUTING.md	no
+round1	jhy/jsoup	.github/CONTRIBUTING.md	no
+round1	mgba-emu/mgba	CONTRIBUTING.md	no
+round1	fedify-dev/fedify	AI_POLICY.md	yes
+round1	dlt-hub/dlt	CONTRIBUTING.md	with-conditions
+round1	openedx/.github	AI_POLICY.md	with-conditions
+round1	yt-dlp/yt-dlp	CONTRIBUTING.md	no
+round1	torchgeo/governance	AI-POLICY.md	yes
+round1	linkml/linkml	AI_COVENANT.md	yes
+round1	qgis/QGIS-Enhancement-Proposals	qep-408-ai-tool-policy.md	yes
+round1	lobsters/lobsters	CONTRIBUTING.md	no
+round1	pypa/pip	AI_POLICY.md	yes
+round1	jqwik-team/jqwik	CONTRIBUTING.md	no
+round1	sphinx-doc/sphinx	doc/internals/ai-policy.rst	yes
+round1	pytorch/pytorch	CONTRIBUTING.md	yes
+round1	astral-sh/.github	AI_POLICY.md	yes
+round2	searxng/searxng	AI_POLICY.rst	yes
+round2	pydata/xarray	doc/contribute/ai-policy.md	yes
+round2	Inochi2D/inochi2d	CONTRIBUTING.md	no
+round2	cybertec-postgresql/pgwatch	AI_POLICY.md	yes
+round2	apache/airflow	contributing-docs/05_pull_requests.rst	yes
+round2	openzim/wp1	CONTRIBUTING.md	yes
+round2	nothings/stb	CONTRIBUTING.md	no
+round2	aaif-goose/goose	CONTRIBUTING.md	yes
+round2	JohnEarnest/Decker	Readme.md	no
+round2	stac-utils/stac-utils.github.io	docs/ai-contribution-policy.md	yes
+round2	schismtracker/schismtracker	AGENTS.md	no
+round2	pytest-dev/pytest	CONTRIBUTING.rst	yes
+round2	libsdl-org/SDL	.github/PULL_REQUEST_TEMPLATE.md	no
+round2	Homebrew/brew	CONTRIBUTING.md	yes
+round2	bcpierce00/unison	CONTRIBUTING.md	no
+round2	ocaml/ocaml	AI.md	yes
+round2	lysine-dev/okhttp	CONTRIBUTING.md	no
+round2	cilium/community	AI-POLICY.md	yes
+round2	apache/pouchdb	CONTRIBUTING.md	no
+round2	go-gitea/gitea	CONTRIBUTING.md	yes
+round2	pkgconf/pkgconf	CONTRIBUTING.md	no
+round2	uaanchorage/GSoC	Acceptable-and-Ethical-AI-Use-Policy.md	with-conditions
+round2	pyvista/pyvista	CONTRIBUTING.rst	yes
+round2	MDAnalysis/mdanalysis	AI_POLICY.md	with-conditions
+round2	cloudnative-pg/governance	AI_POLICY.md	yes
+round2	processing/processing4	AI_USAGE_POLICY.md	yes
+round2	CleverRaven/Cataclysm-DDA	CONTRIBUTING.md	no
+round2	astropy/astropy-project	policies/ai-policy.md	yes
+round2	RustPython/.github	AI_POLICY.md	yes
+round2	BradyAJohnston/MolecularNodes	AI_POLICY.md	with-conditions
+round2	dune3d/dune3d	CONTRIBUTING.md	no
+round2	kornia/kornia	AI_POLICY.md	yes

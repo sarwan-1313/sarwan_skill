@@ -1,0 +1,3 @@
+git status && git log --oneline | head -5 && ls -la && cat CONTRIBUTING.md 2>/dev/null; ls tests test 2>/dev/null; find . -name "*.py" -not -path "./.git/*" | head -50
+grep -rn "parse_size" --include=*.py . | head -20
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat .github/* 2>/dev/null | head -60

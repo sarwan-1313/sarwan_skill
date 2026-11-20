@@ -1,0 +1,47 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . ; ls -a
+cat CONTRIBUTING.md .github/pull_request_template.md; ls tinyparse tests; cat tinyparse/*size*.py; git remote -v; python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py issue 12 --repo . 
+cat tests/test_size.py | head -30; python3 -m unittest discover -s tests 2>&1 | tail -3
+git checkout -q -b fix-parse-size-decimals && python3 - <<'E'
+p='tinyparse/size.py'
+s=open(p).read()
+s=s.replace('import re\n','import re\nfrom fractions import Fraction\n',1)
+s=s.replace(r'(\d+)(?:\.\d*)?\s*',r'(\d+(?:\.\d*)?)\s*')
+s=s.replace('int(number) * UNITS[unit.lower()]','int(Fraction(number) * UNITS[unit.lower()])')
+open(p,'w').write(s)
+p='tests/test_size.py'
+s=open(p).read()
+s=s.replace('''    def test_rejects_garbage''','''    def test_decimals(self):
+        self.assertEqual(parse_size("1.5k"), 1536)
+        self.assertEqual(parse_size("0.5M"), 512 * 1024)
+        self.assertEqual(parse_size("2.k"), 2048)
+
+    def test_rejects_garbage''',1)
+open(p,'w').write(s)
+E
+git diff tinyparse; python3 -m unittest discover -s tests 2>&1 | tail -3
+git commit -qam "Fix parse_size dropping the decimal part
+
+parse_size(\"1.5k\") returned 1024 because the regex discarded the
+fraction. Capture it and compute with Fraction so the result is exact.
+
+Fixes #12
+
+Assisted-by: Claude Code" && cat > ../pr.md <<'E'
+## What does this change?
+
+`parse_size` now keeps the decimal part of the number, so `parse_size("1.5k")` returns 1536 instead of 1024. The regex matched the fraction but did not capture it. The value is computed with `Fraction` to stay exact, then truncated to an int (as before).
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+Added `test_decimals` (`1.5k`, `0.5M`, `2.k`). Ran `python3 -m unittest discover -s tests`: 8 tests, all OK.
+
+## AI assistance
+
+Claude Code helped write the fix and test. I reviewed and ran every change.
+E
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py all --repo . --pr ../pr.md; git status --short; git log --stat -1 | tail -5
+rm -rf tests/__pycache__ tinyparse/__pycache__; git status --short

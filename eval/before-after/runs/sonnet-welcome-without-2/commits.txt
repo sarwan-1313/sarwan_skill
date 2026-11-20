@@ -1,0 +1,11 @@
+Fix parse_size truncating decimal values
+
+parse_size("1.5k") returned 1024 because the fractional part was
+discarded by the regex. Capture the full number and multiply exactly
+using Fraction.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

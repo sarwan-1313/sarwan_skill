@@ -1,0 +1,15 @@
+The fix is committed on the new branch `fix/parse-size-decimals`, and the PR description is at `/tmp/sarwan-ba-haiku-welcome-with-2-w9rl1y_4/pr.md`. Nothing was pushed and no PR was opened.
+
+**The bug:** the regex in `tinyparse/size.py` matched the fractional part of the number but didn't capture it, so `"1.5k"` was read as `1` before the unit was applied. The regex now captures the whole number, and the multiplication uses `Decimal` so it stays exact. The result is still truncated to whole bytes.
+
+**Verification:**
+- I added `test_decimal_units` covering `1.5k`, `1.5M` and `0.5g`. It failed before the fix (`1024 != 1536`) and passes after.
+- The full suite (`python3 -m unittest discover -s tests`) runs 8 tests, all passing.
+- The skill's checker found nothing to fix in the diff or the PR text.
+
+**Choices to review:**
+- **Attribution:** CONTRIBUTING asks for an `Assisted-by:` trailer and says not to list AI tools as `Co-authored-by`. My default commit attribution was a `Co-Authored-By: Claude Haiku 5.5` line, so I used `Assisted-by: Claude Haiku 5.5` instead to follow the project's rule. The PR description ends with the "Generated with Claude Code" line as my default setup asks, and it includes an AI disclosure section, so the disclosure is covered. If you'd rather not have the Claude Code line, delete it from `pr.md`.
+- **Edge case left alone:** `.5k` (no leading digit) is still rejected, as it was before. That's outside issue #12, so I didn't change it.
+- **Truncation:** fractional bytes are truncated (`"1.25"` → 1 byte). That matches the existing integer behavior, but a maintainer might prefer rounding; it's worth a look.
+
+**Before you submit:** the commit `eaf92a7` is on `fix/parse-size-decimals`. I didn't confirm the issue's `accepted` label myself, since I took that from your message. You may want to check it and make sure nobody else has already opened a PR for #12.

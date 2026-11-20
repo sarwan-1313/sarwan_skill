@@ -1,0 +1,61 @@
+diff --git a/tests/__pycache__/test_duration.cpython-313.pyc b/tests/__pycache__/test_duration.cpython-313.pyc
+new file mode 100644
+index 0000000..85603dc
+Binary files /dev/null and b/tests/__pycache__/test_duration.cpython-313.pyc differ
+diff --git a/tests/__pycache__/test_size.cpython-313.pyc b/tests/__pycache__/test_size.cpython-313.pyc
+new file mode 100644
+index 0000000..29d885c
+Binary files /dev/null and b/tests/__pycache__/test_size.cpython-313.pyc differ
+diff --git a/tests/test_size.py b/tests/test_size.py
+index 4c047c2..f79175d 100644
+--- a/tests/test_size.py
++++ b/tests/test_size.py
+@@ -12,6 +12,12 @@ class ParseSizeTests(unittest.TestCase):
+         self.assertEqual(parse_size("3M"), 3 * 1024 ** 2)
+         self.assertEqual(parse_size("1 GiB"), 1024 ** 3)
+ 
++    def test_decimals(self):
++        self.assertEqual(parse_size("1.5k"), 1536)
++        self.assertEqual(parse_size("1.5M"), 3 * 1024 ** 2 // 2)
++        self.assertEqual(parse_size("0.5 KiB"), 512)
++        self.assertEqual(parse_size("2.k"), 2048)
++
+     def test_rejects_garbage(self):
+         with self.assertRaises(ValueError):
+             parse_size("lots")
+diff --git a/tinyparse/__pycache__/__init__.cpython-313.pyc b/tinyparse/__pycache__/__init__.cpython-313.pyc
+new file mode 100644
+index 0000000..27212d4
+Binary files /dev/null and b/tinyparse/__pycache__/__init__.cpython-313.pyc differ
+diff --git a/tinyparse/__pycache__/duration.cpython-313.pyc b/tinyparse/__pycache__/duration.cpython-313.pyc
+new file mode 100644
+index 0000000..65fcf5f
+Binary files /dev/null and b/tinyparse/__pycache__/duration.cpython-313.pyc differ
+diff --git a/tinyparse/__pycache__/size.cpython-313.pyc b/tinyparse/__pycache__/size.cpython-313.pyc
+new file mode 100644
+index 0000000..f226196
+Binary files /dev/null and b/tinyparse/__pycache__/size.cpython-313.pyc differ
+diff --git a/tinyparse/size.py b/tinyparse/size.py
+index 22d0d0f..07ffb33 100644
+--- a/tinyparse/size.py
++++ b/tinyparse/size.py
+@@ -1,8 +1,9 @@
+ """Sizes such as "512", "10k" or "1.5M", in bytes (powers of 1024)."""
+ import re
++from fractions import Fraction
+ 
+ UNITS = {"": 1, "k": 1024, "m": 1024 ** 2, "g": 1024 ** 3, "t": 1024 ** 4}
+-_SIZE = re.compile(r"^\s*(\d+)(?:\.\d*)?\s*([kmgt]?)i?b?\s*$", re.IGNORECASE)
++_SIZE = re.compile(r"^\s*(\d+(?:\.\d*)?)\s*([kmgt]?)i?b?\s*$", re.IGNORECASE)
+ 
+ 
+ def parse_size(text):
+@@ -11,7 +12,7 @@ def parse_size(text):
+     if not m:
+         raise ValueError(f"not a size: {text!r}")
+     number, unit = m.groups()
+-    return int(number) * UNITS[unit.lower()]
++    return int(Fraction(number) * UNITS[unit.lower()])
+ 
+ 
+ def format_size(n):

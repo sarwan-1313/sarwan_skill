@@ -1,0 +1,9 @@
+The fix is committed on a new branch, `fix-parse-size-decimals`. The PR description is at `../pr.md`. I didn't push or open anything.
+
+- **Cause:** The regex in `tinyparse/size.py` matched the decimal part of a number but didn't capture it, so `"1.5k"` was read as `"1k"`.
+- **Fix:** The regex now captures the whole number. The value is scaled with `Fraction`, which avoids float rounding, and then truncated to an int.
+- **Tests:** I added `test_decimals` to `tests/test_size.py`. It covers `1.5k` → 1536, `0.5M`, `2.0k` and a unitless `1.5` → 1. The full suite passes (8 tests).
+- **Commit trailer:** `CONTRIBUTING.md` asks for an `Assisted-by: Claude Code` trailer and says not to use `Co-authored-by` for AI tools. I used `Assisted-by` and left out the `Co-Authored-By` line that my default instructions would add.
+- **PR description:** `../pr.md` follows the repo's template and includes `Fixes #12`. The contributing guide says you must understand and have tested every line, so read the diff and run the tests yourself before submitting.
+
+Fractional bytes are truncated, so `"1.5"` gives 1. The issue doesn't say what should happen there, so say if you'd rather it round.

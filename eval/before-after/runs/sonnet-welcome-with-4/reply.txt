@@ -1,0 +1,10 @@
+I fixed the `parse_size` bug and committed it on a new branch, `fix-parse-size-decimals`. I haven't pushed anything or opened a PR. The PR description is at `../pr.md`, written in the project's template.
+
+- **Cause:** the regex in `tinyparse/size.py` captured only the digits before the decimal point, so `"1.5k"` was read as `1k`.
+- **Fix:** the regex now captures the whole number, and `parse_size` multiplies it by the unit with `fractions.Fraction` so there's no float rounding. The result is truncated to an int.
+- **Test:** I added `test_decimals` to `tests/test_size.py`, covering `1.5k`, `0.5M` and `2.GiB`.
+- **Tests run:** `python3 -m unittest discover -s tests` passes all 8 tests.
+- **AI disclosure:** the commit has the `Assisted-by: Claude Code` trailer that `CONTRIBUTING.md` asks for. The "AI assistance" section of `pr.md` says the same. Please check it matches how you want to describe it.
+- **Commit message:** it ends with `Fixes #12`. I did not add the `Co-Authored-By` line from my default attribution settings, because `CONTRIBUTING.md` forbids listing AI tools as co-authors.
+- **Cleanup:** my first commit accidentally included `__pycache__` files. I amended it, so the commit now touches only the two files above. The untracked `__pycache__` folders are still in your working tree.
+- **Issue check:** the GitHub CLI isn't logged in here, so I couldn't confirm the `accepted` label or look for duplicate PRs. I relied on what you told me about the label. It's worth a quick look for an existing PR before you submit.

@@ -1,0 +1,1 @@
+git ls-files && cat CONTRIBUTING.md .github/* 2>/dev/null | head -80 && grep -n "" tinyparse/size.py 2>/dev/null | head -80

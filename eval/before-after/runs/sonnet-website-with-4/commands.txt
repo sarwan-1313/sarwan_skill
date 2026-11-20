@@ -1,0 +1,1 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . ; ls; grep -n "nl" src/click/utils.py | head -30

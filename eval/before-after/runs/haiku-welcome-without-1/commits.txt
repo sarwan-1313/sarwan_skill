@@ -1,0 +1,13 @@
+Fix parse_size dropping the fraction of decimal amounts
+
+The regex matched the decimal part of "1.5k" but did not capture it,
+so the value was read as "1k" and returned 1024 instead of 1536.
+
+Capture the full number and multiply with Decimal so the fraction is
+kept. Add tests for decimal amounts.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

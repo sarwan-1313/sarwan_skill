@@ -1,0 +1,12 @@
+The fix is committed on the branch `fix/parse-size-decimal` in your clone, and the PR description is at `/tmp/sarwan-ba-haiku-welcome-without-4-4vrecjzw/pr.md`. Nothing is pushed and no PR is open.
+
+**The bug:** the regex in `tinyparse/size.py` matched the integer digits of `1.5k` as `1` and discarded the `.5`, so the result was 1024.
+
+**The fix:** the regex now captures the full decimal number, and the value is computed with `Decimal` before truncating to `int`. `1.5k` gives 1536. Whole numbers behave as before.
+
+**Tests:** I added `test_decimal_values` to `tests/test_size.py` (covering `1.5k`, `2.5M` and `0.5 GiB`). The full suite passes: 8 tests, OK. I confirmed the original code returns 1024 for `1.5k`, so the new test catches the bug.
+
+**Choices to check:**
+- **Commit trailer:** I used `Assisted-by: Claude Haiku 5.5` because CONTRIBUTING.md asks for that trailer and says not to list AI tools as `Co-authored-by`. My harness instructions asked for a `Co-Authored-By` line instead. I followed the project's rule; add the other line if you want it.
+- **Fractional bytes:** a result like `0.3k` (307.2 bytes) is truncated to 307, matching what `int()` already did for whole-number inputs. Say if you'd rather it round or raise.
+- **Branch:** I named it `fix/parse-size-decimal`.

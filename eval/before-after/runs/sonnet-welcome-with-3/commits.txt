@@ -1,0 +1,10 @@
+Fix parse_size dropping the decimal part
+
+parse_size("1.5k") returned 1024 because the regex discarded the
+fraction. Capture it and compute with Fraction so the result is exact.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

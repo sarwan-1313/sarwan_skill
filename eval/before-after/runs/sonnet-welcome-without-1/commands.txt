@@ -1,0 +1,48 @@
+git ls-files && cat CONTRIBUTING.md .github/*template* 2>/dev/null; grep -rn "def parse_size" -A40 src tinyparse 2>/dev/null
+cat tinyparse/size.py | head -8; cat tests/test_size.py
+python3 - <<'E'
+p='tinyparse/size.py'
+s=open(p).read()
+s=s.replace('import re\n','import re\nfrom fractions import Fraction\n',1)
+s=s.replace(r'(\d+)(?:\.\d*)?\s*',r'(\d+(?:\.\d*)?)\s*')
+s=s.replace('int(number) * UNITS','int(Fraction(number.rstrip(".")) * UNITS')
+s=s.replace('UNITS[unit.lower()]\n','UNITS[unit.lower()])\n',1)
+open(p,'w').write(s)
+p='tests/test_size.py'
+s=open(p).read()
+s=s.replace('''    def test_rejects''','''    def test_decimals(self):
+        self.assertEqual(parse_size("1.5k"), 1536)
+        self.assertEqual(parse_size("0.5M"), 512 * 1024)
+        self.assertEqual(parse_size("2.0k"), 2048)
+        self.assertEqual(parse_size("1.k"), 1024)
+
+    def test_rejects''',1)
+open(p,'w').write(s)
+E
+git diff tinyparse; python3 -m unittest discover -s tests 2>&1 | tail -4
+git checkout -q -b fix-parse-size-decimals && git commit -qam "Fix parse_size dropping the fractional part of decimals
+
+parse_size(\"1.5k\") returned 1024 because the regex matched the
+fraction but did not capture it. Capture the full number and scale it
+exactly with Fraction.
+
+Fixes #12
+
+Assisted-by: Claude Code" && git log -1 --stat | tail -5
+cat > ../pr.md <<'E'
+## What does this change?
+
+Fixes `parse_size` ignoring the fractional part of decimal sizes. The regex matched `.5` but only captured the integer part, so `"1.5k"` was parsed as `1k`. The full number is now captured and scaled with `fractions.Fraction` (exact, no float rounding); the result is truncated to a whole number of bytes.
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+Added `test_decimals` (`1.5k` -> 1536, `0.5M`, `2.0k`, and `1.k`, which the old regex also accepted). Ran the full suite: `python3 -m unittest discover -s tests` (8 tests, all pass).
+
+## AI assistance
+
+Claude Code was used to find the cause, write the fix and the test. Commit carries an `Assisted-by: Claude Code` trailer per CONTRIBUTING.md.
+E

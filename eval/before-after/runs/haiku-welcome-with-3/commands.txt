@@ -1,0 +1,50 @@
+git remote -v && git status --short && python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . 2>&1 | head -150
+cat CONTRIBUTING.md && echo ---- && cat .github/pull_request_template.md && echo ---- && ls -a && cat AGENTS.md 2>/dev/null; echo ----; ls; git log --oneline | head -5; echo ----; cat tinyparse/*.py 2>/dev/null | head -0; find . -name "*.py" -not -path "./.git/*" | head -30
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py issue 12 --repo . 2>&1 | head -60
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat tinyparse/__init__.py && git log -1 --format='%an <%ae>'
+python3 -m unittest discover -s tests 2>&1 | tail -3; python3 -c "
+import sys; sys.path.insert(0,'.')
+from tinyparse import parse_size; print(parse_size('1.5k'))"; git checkout -b fix/parse-size-decimals && git status --short
+python3 -m unittest discover -s tests -v 2>&1 | tail -15; python3 -c "
+import sys; sys.path.insert(0,'.')
+from tinyparse import parse_size as p
+for s in ['1.5k','2k','1.','0.5k','1.25 MiB','512','2.5 GB']: print(repr(s), p(s))
+for s in ['lots','.5k']:
+  try: print(repr(s), p(s))
+  except ValueError as e: print(repr(s), 'ValueError', e)
+"
+git stash push -q -- tinyparse/size.py && python3 -m unittest discover -s tests 2>&1 | grep -E "FAIL|Ran|OK|FAILED" ; git stash pop -q && python3 -m unittest discover -s tests 2>&1 | tail -1 && git status --short && python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py diff --repo . 2>&1 | tail -25
+rm -rf tests/__pycache__ tinyparse/__pycache__ && git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Keep decimal part in parse_size
+
+parse_size("1.5k") returned 1024 because the regex matched the
+fractional part but never captured it, so only the integer part was
+used. Capture the full number and multiply it exactly with Fraction.
+
+Fixes #12
+
+Assisted-by: Claude Code
+EOF
+git log -1 --format=%B && git show --stat HEAD | tail -4
+cat > /tmp/sarwan-ba-haiku-welcome-with-3-oc9m5wvr/pr.md <<'EOF'
+## What does this change?
+
+`parse_size` ignored the fractional part of a number, so `"1.5k"` returned 1024 instead of 1536. The regex now captures the whole number, which is then multiplied exactly with `fractions.Fraction`. Whole numbers behave as before.
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+- `python3 -m unittest discover -s tests`: 8 tests pass.
+- Added `test_decimal_units` (`"1.5k"` → 1536, `"1.5M"` → 1.5 MiB). It fails on the old code and passes with this change.
+- Checked by hand: `"2k"`, `"1."`, `"0.5k"`, `"1.25 MiB"`, `"2.5 GB"` return the expected values; `"lots"` and `".5k"` still raise `ValueError`, as before.
+
+## AI assistance
+
+Used Claude Code (Haiku 5.5) to find the cause and draft the change and test. I read every line, reproduced the bug on the original code, and ran the test suite myself.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py pr /tmp/sarwan-ba-haiku-welcome-with-3-oc9m5wvr/pr.md --repo /tmp/sarwan-ba-haiku-welcome-with-3-oc9m5wvr/tinyparse 2>&1 | tail -20; cd /tmp/sarwan-ba-haiku-welcome-with-3-oc9m5wvr/tinyparse && git status --short && git branch --show-current

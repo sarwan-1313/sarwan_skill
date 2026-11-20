@@ -1,0 +1,5 @@
+I added the sentence to the `nl` parameter docs in the `click.echo` docstring (`src/click/utils.py`). It now reads: "If `False`, the output stays on the same line, so the next output continues it."
+
+- **Commit:** `e327177` on a new branch, `docs-echo-nl`, with the Claude co-author line. The working tree is clean. I didn't run the tests or build the docs, since it's a docstring-only change.
+- **PR description:** `../pr.md` has a title, a short summary and the attribution line. It says no tests or changelog entry are needed, which I assumed from this being docs-only. I didn't check Click's contribution guidelines, so you may want to confirm that.
+- **Not pushed:** nothing has been pushed and no pull request is open.

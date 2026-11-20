@@ -1,0 +1,48 @@
+diff --git a/tests/test_size.py b/tests/test_size.py
+index 4c047c2..ff3460e 100644
+--- a/tests/test_size.py
++++ b/tests/test_size.py
+@@ -12,6 +12,16 @@ class ParseSizeTests(unittest.TestCase):
+         self.assertEqual(parse_size("3M"), 3 * 1024 ** 2)
+         self.assertEqual(parse_size("1 GiB"), 1024 ** 3)
+ 
++    def test_decimal_units(self):
++        self.assertEqual(parse_size("1.5k"), 1536)
++        self.assertEqual(parse_size("0.5k"), 512)
++        self.assertEqual(parse_size("1.5M"), 1024 ** 2 + 512 * 1024)
++        self.assertEqual(parse_size("2.5 GiB"), 5 * 1024 ** 3 // 2)
++
++    def test_rejects_fractional_bytes(self):
++        with self.assertRaises(ValueError):
++            parse_size("1.5")
++
+     def test_rejects_garbage(self):
+         with self.assertRaises(ValueError):
+             parse_size("lots")
+diff --git a/tinyparse/size.py b/tinyparse/size.py
+index 22d0d0f..e82ec43 100644
+--- a/tinyparse/size.py
++++ b/tinyparse/size.py
+@@ -1,8 +1,9 @@
+ """Sizes such as "512", "10k" or "1.5M", in bytes (powers of 1024)."""
+ import re
++from decimal import Decimal
+ 
+ UNITS = {"": 1, "k": 1024, "m": 1024 ** 2, "g": 1024 ** 3, "t": 1024 ** 4}
+-_SIZE = re.compile(r"^\s*(\d+)(?:\.\d*)?\s*([kmgt]?)i?b?\s*$", re.IGNORECASE)
++_SIZE = re.compile(r"^\s*(\d+(?:\.\d*)?)\s*([kmgt]?)i?b?\s*$", re.IGNORECASE)
+ 
+ 
+ def parse_size(text):
+@@ -11,7 +12,10 @@ def parse_size(text):
+     if not m:
+         raise ValueError(f"not a size: {text!r}")
+     number, unit = m.groups()
+-    return int(number) * UNITS[unit.lower()]
++    nbytes = Decimal(number) * UNITS[unit.lower()]
++    if nbytes != nbytes.to_integral_value():
++        raise ValueError(f"not a whole number of bytes: {text!r}")
++    return int(nbytes)
+ 
+ 
+ def format_size(n):

@@ -1,0 +1,15 @@
+The fix is committed on branch `fix/parse-size-decimals` and the PR description is at `/tmp/sarwan-ba-haiku-welcome-with-3-oc9m5wvr/pr.md`. Nothing is pushed and no PR is open.
+
+**The bug:** the size regex matched the decimal part of the number but never captured it, so `"1.5k"` was read as `"1k"`. The fix captures the whole number and multiplies it exactly with `fractions.Fraction`.
+
+**What I ran:**
+- The full suite (`python3 -m unittest discover -s tests`): 8 tests pass.
+- A new test, `test_decimal_units`, which fails on the old code and passes with the fix.
+- A few hand-checked edge cases: whole numbers still work, and garbage input like `"lots"` and `".5k"` still raises `ValueError`.
+
+**Choices I made:**
+- **Commit trailer:** I used `Assisted-by: Claude Code`, the format CONTRIBUTING.md gives. I did not add the `Co-Authored-By` line from the generic attribution reminder, because CONTRIBUTING.md says not to list AI tools as co-authors. Add it back only if the maintainers want it.
+- **PR footer:** `pr.md` ends with the "Generated with Claude Code" line from the attribution reminder. Delete it if you'd rather not have it.
+- **Scope:** I left `duration.py` alone. I didn't check whether it has the same decimal-dropping pattern; that would be a separate issue or PR.
+
+**Not verified:** the issue checker could not read #12 because `gh` isn't authenticated here, so I relied on your word that the issue is labeled `accepted` and unclaimed. The PR text checker passed.

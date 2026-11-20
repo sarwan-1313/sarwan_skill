@@ -1,0 +1,13 @@
+Fix parse_size dropping the fraction of decimal sizes
+
+The regex matched the decimal part of a size but did not capture it,
+so "1.5k" was parsed as "1" and returned 1024 instead of 1536.
+
+Capture the full decimal number and multiply it with Decimal so the
+fraction is kept exactly, then truncate to whole bytes as before.
+
+Fixes #12
+
+Assisted-by: Claude Code
+
+----

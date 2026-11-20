@@ -1,0 +1,11 @@
+The fix is committed on a new branch, `docs-echo-nl-false`, and the PR description is in `../pr.md`. I didn't push or open the PR.
+
+**The change:** In `src/click/utils.py`, the `:param nl:` entry of `click.echo` now has one more sentence after "Enabled by default.":
+
+> If disabled, the output stays on the same line, so the next output continues it.
+
+Commit `35ddcc5` touches only that file, with two added lines. I didn't pick the wording from a maintainer's example, so adjust it if you prefer different phrasing.
+
+**Verification:** pytest isn't installed in this environment, so I didn't run the test suite. I confirmed the module imports and the docstring text reads correctly. The change is docstring-only, so behavior shouldn't be affected, but you may want to run the tests before submitting.
+
+**PR description** (`/tmp/sarwan-ba-haiku-website-without-4-6p2c7nl7/pr.md`): it names the issue, quotes the new sentence, and notes that the change is docs-only and that I didn't run the tests.

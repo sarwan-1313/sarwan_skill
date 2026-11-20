@@ -1,0 +1,13 @@
+The docstring fix is committed on the branch `docs-echo-nl-docstring`, and the PR description is at `/tmp/sarwan-ba-haiku-website-with-4-iptk__yc/pr.md`. Nothing is pushed and no PR is open.
+
+**The change** is one added sentence in the `nl` parameter of `click.echo` in `src/click/utils.py`:
+
+> When disabled, the output stays on the same line, so the next output continues it.
+
+It is docstring-only, so no behavior changes.
+
+**Things to check before you submit:**
+- **Tests did not run.** pytest could not be installed here (no package index access). I checked by importing `click.utils` and reading the rendered docstring. Please run `tox -e py` or the test suite on your side.
+- **Issue number.** `pr.md` has a `fixes #<issue number>` placeholder. Fill it in.
+- **No CHANGES.md entry.** The PR template asks for one, but I judged a docstring clarification with no behavior change not to need it. The PR description says so. Add one if you want it recorded.
+- **AI policy.** I found no AI contribution policy in the repo (no CONTRIBUTING file, and the PR template and issue config don't mention AI). The docs and PR template have no AI disclosure requirement, so I did not add one beyond the note in `pr.md` that tests weren't run. Check the upstream Pallets contributing guide yourself, since I could not verify it from here.

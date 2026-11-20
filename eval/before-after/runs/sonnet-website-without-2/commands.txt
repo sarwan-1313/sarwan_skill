@@ -1,0 +1,19 @@
+ls; head -30 CHANGES.rst; ls .github; git log -3 --format=%B | head -20
+cat .github/pull_request_template.md; head -20 CHANGES.md
+git checkout -q -b docs-echo-nl && git add -A && git commit -q -m "Document \`nl=False\` in \`click.echo\` docstring
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>" && cat > ../pr.md <<'EOF'
+Document what `nl=False` does in `click.echo`
+
+The `nl` parameter docstring only said a newline is printed by default. It now
+also says that when disabled, the output stays on the same line, so the next
+output continues it.
+
+Docstring-only change, so no tests or changelog entry.
+
+<!-- Replace with the issue number before submitting -->
+fixes #<issue number>
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+git show --stat HEAD | tail -4

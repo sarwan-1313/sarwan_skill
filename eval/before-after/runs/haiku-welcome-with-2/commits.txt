@@ -1,0 +1,12 @@
+Fix parse_size dropping decimal parts
+
+parse_size("1.5k") returned 1024 instead of 1536 because the regex
+discarded the fractional part before the unit multiplier was applied.
+Capture the full number and multiply with Decimal so the result is exact,
+truncating only the final byte count.
+
+Fixes #12
+
+Assisted-by: Claude Haiku 5.5
+
+----

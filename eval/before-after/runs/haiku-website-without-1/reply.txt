@@ -1,0 +1,7 @@
+The fix is committed on a new branch, and the PR description is at `../pr.md`. Nothing is pushed and no PR is open.
+
+- **Branch:** `docs/echo-nl-false`, one commit `a41413e`: "Document what `nl=False` does in `echo`".
+- **Change:** in `src/click/utils.py`, the `:param nl:` entry of `click.echo` now adds: "If disabled, the output stays on the same line, so the next output continues it." I put it under the parameter, since that is where `nl` is documented. The issue asked for one sentence, and this adds one.
+- **Verification:** the change is docstring-only and the module compiles. I could not run the test suite or lint because pytest and ruff are not installed in this environment.
+- **PR description:** `../pr.md` says the change is docstring-only and mentions the "docs" issue, but it does not name an issue number because I don't have one. Add it before you submit.
+- **Commit trailer:** the commit ends with the `Co-Authored-By: Claude Haiku 5.5` line you specified, and the PR description ends with the "Generated with Claude Code" line.

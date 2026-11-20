@@ -1,0 +1,47 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . ; ls -a; git remote -v
+cat CONTRIBUTING.md .github/pull_request_template.md; ls tinyparse tests; cat tinyparse/size.py 2>/dev/null; python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py issue 12 --repo . 
+python3 -c "from tinyparse.size import parse_size as p;print(p('1.5k'),p('2k'),p('.5k') if 0 else '')"; cat tests/test_size.py | head -30; python3 -m unittest discover -s tests 2>&1 | tail -3
+git checkout -q -b fix-parse-size-decimals && python3 - <<'E'
+p='tinyparse/size.py'
+s=open(p).read()
+s=s.replace('import re\n','import re\nfrom fractions import Fraction\n',1)
+s=s.replace(r'(\d+)(?:\.\d*)?',r'(\d+(?:\.\d*)?)')
+s=s.replace('int(number) * UNITS','int(Fraction(number) * UNITS')
+s=s.replace('UNITS[unit.lower()]\n','UNITS[unit.lower()])\n',1)
+open(p,'w').write(s)
+p='tests/test_size.py'
+s=open(p).read()
+s=s.replace('''    def test_rejects_garbage''','''    def test_decimals(self):
+        self.assertEqual(parse_size("1.5k"), 1536)
+        self.assertEqual(parse_size("0.5M"), 512 * 1024)
+        self.assertEqual(parse_size("2.0k"), 2048)
+
+    def test_rejects_garbage''',1)
+open(p,'w').write(s)
+E
+git diff; python3 -m unittest discover -s tests 2>&1 | tail -3
+python3 -c "from tinyparse.size import parse_size as p;print(p('1.'),p('1.5k'))" && git commit -qam "Fix parse_size dropping the fractional part of decimals
+
+parse_size(\"1.5k\") returned 1024 because the regex discarded the
+digits after the decimal point. Keep them and compute exactly.
+
+Fixes #12
+
+Assisted-by: Claude Code" && cat > ../pr.md <<'E'
+## What does this change?
+
+`parse_size` now keeps the fractional part of decimal sizes, so `parse_size("1.5k")` returns 1536 instead of 1024. The regex matched the digits after the point but did not capture them. The number is now parsed with `Fraction` to avoid float rounding, then truncated to an int.
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+Reproduced the bug first (`parse_size("1.5k")` gave 1024). Added `test_decimals` in `tests/test_size.py`. Ran `python3 -m unittest discover -s tests`: 8 tests, all OK.
+
+## AI assistance
+
+I used Claude Code to help write the fix and tests. I reviewed and ran every change. Commit has an `Assisted-by: Claude Code` trailer.
+E
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py diff --repo . ; python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py pr ../pr.md --repo .; git log -1 --format=%B | tail -3; git status --short

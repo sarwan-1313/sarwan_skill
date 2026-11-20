@@ -1,0 +1,8 @@
+`parse_size("1.5k")` now returns 1536. The fix is committed on a new branch, `fix-parse-size-decimals`, and the full suite passes (8 tests). Nothing is pushed and no pull request is open.
+
+- **Cause:** the regex in `tinyparse/size.py` matched the `.5` in `1.5k` but didn't capture it, so only the `1` was used.
+- **Fix:** the regex now captures the whole number, and the multiplication uses `fractions.Fraction` so there's no float rounding. The result is truncated to an int, and whole numbers behave as before.
+- **Test:** I added `test_decimals` in `tests/test_size.py`. It covers `1.5k`, `1.5M`, `0.5 KiB` and `2.k`.
+- **Pull request description:** `../pr.md` follows the repo's template and links `Fixes #12`.
+
+**Commit trailer:** I used `Assisted-by: Claude Code` rather than `Co-Authored-By`. `CONTRIBUTING.md` asks for the former and says not to list AI tools as co-authors. The AI-assistance section of `pr.md` also discloses the help. Please check that section matches what you want to say.

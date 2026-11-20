@@ -1,0 +1,8 @@
+The fix is committed on a new branch, `docs-echo-nl-false`, and the PR description is at `/tmp/sarwan-ba-haiku-website-without-5-myfis_1x/pr.md`. I didn't push or open the PR.
+
+**The change:** In `src/click/utils.py`, the `:param nl:` entry of `click.echo` now has one sentence after the existing text: "If disabled, the output stays on the same line, so the next output continues it." The commit is `db81da8`.
+
+**Things to check before you submit:**
+- **Issue number:** I didn't have the issue number, so `pr.md` has a placeholder `Refs: #<issue number>`. Fill it in before you submit.
+- **Tests not run:** Neither ruff nor pytest is installed in this environment, so I didn't run the test suite or the linter. The change is two lines of docstring text, so the risk is low.
+- **No changelog entry:** I left `CHANGES.md` alone because it records behavior changes and this is docs-only. Add one if the maintainers want it.

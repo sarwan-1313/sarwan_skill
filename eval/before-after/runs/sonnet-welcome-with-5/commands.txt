@@ -1,0 +1,43 @@
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py policy --repo . ; ls -a; git remote -v
+cat CONTRIBUTING.md .github/pull_request_template.md; ls tinyparse tests; cat tinyparse/*size*.py; python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py issue 12 --repo . 
+python3 -c "from tinyparse.size import parse_size as p;print(p('1.5k'))"; tail -20 tests/test_size.py; git checkout -q -b fix-parse-size-decimals
+python3 - <<'E'
+p='tinyparse/size.py'
+s=open(p).read()
+s=s.replace('import re\n','import re\nfrom decimal import Decimal\n',1)
+s=s.replace(r'(\d+)(?:\.\d*)?\s*',r'(\d+(?:\.\d*)?)\s*')
+s=s.replace('int(number) * UNITS','int(Decimal(number) * UNITS')
+s=s.replace('UNITS[unit.lower()]\n','UNITS[unit.lower()])\n',1) if False else s
+open(p,'w').write(s)
+p='tests/test_size.py'
+s=open(p).read()
+s=s.replace('''    def test_rejects_garbage''','''    def test_decimals(self):
+        self.assertEqual(parse_size("1.5k"), 1536)
+        self.assertEqual(parse_size("0.5M"), 512 * 1024)
+        self.assertEqual(parse_size("2.k"), 2048)
+
+    def test_rejects_garbage''',1)
+open(p,'w').write(s)
+E
+grep -n "Decimal" tinyparse/size.py
+sed -i '15s/$/)/' tinyparse/size.py && python3 -m unittest discover -s tests 2>&1 | tail -4; git diff
+git commit -qam "Fix parse_size dropping the fractional part of decimals
+
+Assisted-by: Claude Code" && cat > ../pr.md <<'E'
+## What does this change?
+
+`parse_size` matched the decimal part of a number but discarded it, so "1.5k" gave 1024. The whole number, including the fraction, is now multiplied by the unit (using `Decimal` to avoid float error and still return an `int`). Adds a test for decimal inputs.
+
+## Which issue does it fix?
+
+Fixes #12
+
+## How was it tested?
+
+Reproduced `parse_size("1.5k") == 1024` before the change. After it, `python3 -m unittest discover -s tests` passes (8 tests), including the new `test_decimals`.
+
+## AI assistance
+
+I used Claude Code to write the fix and test. I reviewed and ran every change. The commit has an `Assisted-by: Claude Code` trailer.
+E
+python3 <sarwan_skill>/skills/sarwan-skill/scripts/check.py all --repo . --pr ../pr.md 2>&1 | tail -15; git status --short; git log --oneline -1

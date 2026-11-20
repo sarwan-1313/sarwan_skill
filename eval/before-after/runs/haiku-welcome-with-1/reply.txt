@@ -1,0 +1,13 @@
+The fix is committed on a local branch `fix/parse-size-decimal`, and the PR description is at `/tmp/sarwan-ba-haiku-welcome-with-1-tw3i8g_e/pr.md`. Nothing is pushed and no PR is open.
+
+**The bug:** the regex in `tinyparse/size.py` captured only the integer digits of the number and skipped the fraction, so `"1.5k"` became 1 × 1024. The number is now captured in full and multiplied with `Decimal`, so `"1.5k"` gives 1536.
+
+**Tests:** I added `test_decimal_units` (covering `"1.5k"`, `"0.5M"`, `"2.25k"`). It fails on the original code and passes with the fix. The full suite passes: `python3 -m unittest discover -s tests`, 8 tests, OK.
+
+**Choices to review:**
+- **Commit trailer:** I used `Assisted-by: Claude Code`, the format CONTRIBUTING.md asks for. I left out the `Co-Authored-By: Claude Haiku 5.5` line my instructions asked for, because CONTRIBUTING.md says not to list AI tools as co-authors. If you want that line anyway, it's a one-line amend.
+- **PR footer:** the description ends with the "Generated with Claude Code" line my instructions asked for. Delete it if you'd rather not have it.
+- **Issue #12:** I couldn't confirm the `accepted` label because the GitHub CLI isn't authenticated here. I went by your report.
+- **Edge case I didn't change:** a fractional number with no unit, such as `"1.5"`, is now truncated to 1 byte. It was 1 before too. Rejecting it would be a separate behavior change, so I left it for you to decide.
+
+To push and open the PR yourself: `git push -u origin fix/parse-size-decimal`, then paste in `../pr.md`.

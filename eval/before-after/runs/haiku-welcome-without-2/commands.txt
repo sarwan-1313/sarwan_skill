@@ -1,0 +1,21 @@
+git status && git log --oneline | head -5 && ls -la && cat CONTRIBUTING.md 2>/dev/null; find . -name "*.py" -not -path "./.git/*" | head -50
+cat tinyparse/size.py && echo ---- && cat tests/test_size.py && echo ---- && cat tinyparse/__init__.py && echo ---- && cat .github/* && echo ---- && cat README.md pyproject.toml && echo ---- && cat tinyparse/duration.py | head -40
+python3 -m unittest discover -s tests 2>&1 | tail -3; python3 -c "from tinyparse import parse_size as p; print(p('1.5k'), p('2k'))"; git checkout -b fix/parse-size-decimal && git log -1 --format='%an <%ae>' && git config user.name; git config user.email; echo; sed -n 1,3p ../pr.md 2>/dev/null; echo done
+python3 -m unittest discover -s tests 2>&1 | tail -3; python3 -c "
+from tinyparse import parse_size as p
+for s in ['1.5k','2k','1.', '512','1.5 MiB','0.5k']: print(repr(s), p(s))
+"; git stash -q && python3 -m unittest discover -s tests 2>&1 | tail -1; git stash pop -q && git status --short
+git stash push -q -- tinyparse/size.py && python3 -m unittest discover -s tests 2>&1 | grep -E "^(FAIL|Ran|OK|FAILED)"; git stash pop -q && rm -rf tests/__pycache__ tinyparse/__pycache__ && python3 -m unittest discover -s tests 2>&1 | tail -1 && find . -name __pycache__ -not -path './.git/*' -exec rm -rf {} + ; git status --short
+git add tinyparse/size.py tests/test_size.py && git commit -q -F - <<'EOF'
+Fix parse_size dropping the fraction of decimal sizes
+
+The regex matched the fractional part of a size but did not capture it,
+so int("1.5") discarded the ".5" and parse_size("1.5k") returned 1024
+instead of 1536. Capture the full number and multiply it as a Decimal
+so fractions stay exact, then truncate to a whole number of bytes.
+
+Fixes #12
+
+Assisted-by: Claude Code
+EOF
+git log -1 --stat && git show -s --format=%B HEAD && git status --short

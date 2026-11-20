@@ -1,0 +1,7 @@
+I added the sentence to the `nl` parameter docs in `click.echo` and committed it on a new branch, `docs-echo-nl`. I didn't run any tests or build the docs, since it only touches a docstring.
+
+The `nl` entry in `src/click/utils.py` now reads: "Print a newline after the message. Enabled by default. If disabled, the output stays on the same line, so the next output continues it."
+
+The commit message ends with the Claude co-author line. I skipped a `CHANGES.md` entry because the PR template exempts simple docs changes.
+
+The PR description is in `../pr.md`. I left `fixes #<issue number>` as a placeholder because I don't know the issue number, so fill that in before you submit. Nothing has been pushed.
