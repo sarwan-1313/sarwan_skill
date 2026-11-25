@@ -53,7 +53,7 @@ The first-run column is the fair number for unseen projects. The "now" column co
 - pdfcpu: "coordinated disclosure" in a security note was read as a disclosure rule.
 - scikit-learn and llama.cpp: "a person must submit" rules in a section without the word AI, or in `AGENTS.md`, were missed.
 
-The one ban still not blocked is pdfcpu, which rejects pull requests "created substantially by AI tools". The guard hands that step to the person with the rule quoted, because it can't tell how much of a change the person wrote. OpenJDK's ban is only on its website. With the bundled list the guard pauses and quotes it; without the list, it only asks for the disclosure that the pull request template links to.
+The one ban still not blocked is pdfcpu, which rejects pull requests "created substantially by AI tools". The guard hands that step to the person with the rule quoted, because it can't tell how much of a change the person wrote. OpenJDK's ban is only on its website, which its pull request template links to. With the bundled list the guard pauses and points the person to that policy; without the list, it only asks for an AI disclosure.
 
 ## Limits
 
