@@ -48,6 +48,15 @@ The same happens when the policy lives on a website. Flask's repository says not
 
 > The project wants an accepted issue before any PR. I searched: there's no issue for a `--json` flag, and no open PR adding one. Here's a short issue draft for you to post. I'll wait for a maintainer to reply before writing code.
 
+When the issue exists but is taken, `check.py issue` says so and offers others:
+
+```
+  FIX    Issue #12 is assigned to maria. Pick another one, or ask on the issue first.
+  INFO   Other open issues nobody is assigned to, to offer the person instead: #41 Sizes with a space
+         before the unit fail to parse; #38 Document the accepted units. Check one with
+         `check.py issue <number>` before starting.
+```
+
 ---
 
 ## 3. The drive-by cleanup
@@ -234,3 +243,31 @@ If the prose had said one thing and the block another, the check would have said
 ```
 
 The same fact check runs on pull request descriptions. With the plugin, the guard runs it before `gh issue create`, too.
+
+---
+
+## 11. The paperwork: changelog entries and CLAs
+
+**You:** "Fix the crash on sizes with spaces, and open the PR."
+
+**Without the skill:** the fix is right, but CI fails because the project wants a news fragment with every change, and the merge waits on a CLA that only the person can sign.
+
+**With the skill:**
+
+```
+== Project rules
+  CHECK  The project asks contributors to sign a Contributor License Agreement (CLA) before it can
+         merge their work. Tell the person: only they can sign it, so never sign it or answer the
+         CLA bot for them.
+         at CONTRIBUTING.md:3
+
+== Your change
+  CHECK  The project records each change as a separate file (towncrier, in news/), and this change
+         adds none. Add one in the project's format, or ask the maintainers whether this change
+         needs it.
+         at pyproject.toml
+```
+
+> The fix is ready, with `news/41.bugfix.md` in the project's format. Before you open the PR: this project needs a signed CLA, and only you can sign it. The link is in CONTRIBUTING.md.
+
+When the project's CI checks for the entry, a missing one is a FIX, and the guard asks you before the push.

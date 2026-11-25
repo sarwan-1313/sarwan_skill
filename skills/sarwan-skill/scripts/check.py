@@ -323,6 +323,20 @@ FLAGS = {
 }
 FLAGS = {k: (re.compile(p), m) for k, (p, m) in FLAGS.items()}
 DCO = re.compile(r"(?i)\bsigned-off-by\b|\bDCO\b|developer certificate of origin")
+CLA = re.compile(r"(?i)contributor licen[cs]e agreement|\bI?CLAs?\b|cla[- ]assistant|cla\.developers\.google\.com|"
+                 r"\beasycla\b|opensource\.microsoft\.com/cla|\bcla[- ]?bot\b")
+CLA_NAME = r"(?:I?CLAs?|contributor licen[cs]e agreements?)\b"
+NO_CLA = re.compile(r"(?i)\bno\s+(?:\w+\s+){0,2}" + CLA_NAME +
+                    r"|\bno\s+need\b[^.\n]{0,30}?\b" + CLA_NAME +
+                    r"|(?:\bnot|n't)\s+(?:\w+\s+){0,2}(?:require|need|ask|have|use)\w*\s+(?:\w+\s+){0,3}?" + CLA_NAME +
+                    r"|\b" + CLA_NAME + r"\s+(?:is|are)\s+not\s+(?:required|needed|necessary)" +
+                    r"|\bwithout\s+(?:signing\s+)?(?:an?\s+)?" + CLA_NAME)
+CLA_STRONG = re.compile(r"(?i)cla[- ]assistant|cla\.developers\.google\.com|\beasycla\b|opensource\.microsoft\.com/cla|"
+                        r"\bcla[- ]?bot\b")
+README_CLA_HEADING = re.compile(r"(?i)contribut|\bI?CLAs?\b|licen[cs]|legal|pull request")
+CLA_FILES = ("CLA.md", "cla.md", "CLA.txt", "CLA", ".github/CLA.md", ".clabot", ".github/cla.yml")
+CLA_WORKFLOW = re.compile(r"(?i)contributor-assistant/github-action|cla-assistant|"
+                          r"\bcla[- ]?(?:bot|check|signatures?)\b|\beasycla\b|^\s*name:\s*[\"']?CLA\b", re.M)
 URL = re.compile(r"https?://[^\s)>\]\"'`]+")
 POLICY_LINK = re.compile(r"(?i)polic|contribut|guideline|\bai\b|[/_-]ai[/_.#-]|llm|generative|slop|agent|disclos")
 NOT_POLICY_LINK = re.compile(r"(?i)wikipedia\.org|shields\.io|badge|\.(?:svg|png|jpe?g|gif)(?:$|\?)|/press-release/|"
@@ -406,11 +420,15 @@ def read_policy(repo):
     repo = Path(repo)
     files = candidate_files(repo)
     hits, block, block_where, block_problems, links, dco_where, agents_files, templates = [], None, "", [], [], "", [], []
+    cla_where = ""
 
     for kind, rel in files:
         text = read_text(repo / rel)
         if not text:
             continue
+        if kind != "agents" and not cla_where:
+            n = cla_line(text, kind)
+            cla_where = f"{rel.as_posix()}:{n}" if n else ""
         if kind == "agents":
             agents_files.append(str(rel))
         if kind == "template" and "pull_request" in str(rel).lower():
@@ -495,10 +513,43 @@ def read_policy(repo):
     return {
         "stance": stance, "prose_stance": prose_stance, "disclosure": disclosure, "flags": flags, "hits": hits,
         "block": block, "block_where": block_where, "block_problems": block_problems,
-        "links": list(dict.fromkeys(links))[:5], "dco": dco_where,
+        "links": list(dict.fromkeys(links))[:5], "dco": dco_where, "cla": cla_where or cla_config(repo),
         "agents_files": agents_files, "templates": templates,
         "files_read": [str(rel) for _, rel in files],
     }
+
+
+def cla_line(text, kind):
+    """The line number where the text asks for a signed CLA, or 0. A README counts only in a contributing or legal
+    section or with a CLA bot link, so a README that merely talks about CLAs is not a requirement."""
+    heading = ""
+    for n, line in enumerate(text.splitlines(), 1):
+        h = re.match(r"^\s{0,3}#{1,6}\s+(.*)", line)
+        if h:
+            heading = h.group(1)
+        if not CLA.search(line) or NO_CLA.search(re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", line)):
+            continue
+        if kind == "readme" and not (CLA_STRONG.search(line) or README_CLA_HEADING.search(heading)):
+            continue
+        return n
+    return 0
+
+
+def cla_config(repo):
+    """Where a CLA document, bot or check is set up in the repository, or ''."""
+    repo = Path(repo)
+    for name in CLA_FILES:
+        if (repo / name).is_file():
+            return name
+    wf = repo / ".github" / "workflows"
+    if wf.is_dir():
+        for path in sorted(wf.glob("*.y*ml"))[:30]:
+            text = read_text(path)
+            m = CLA_WORKFLOW.search(text)
+            if m:
+                line = text.count("\n", 0, m.start()) + 1
+                return f"{path.relative_to(repo).as_posix()}:{line}"
+    return ""
 
 
 # --------------------------------------------------------------------------
@@ -674,6 +725,10 @@ def policy_findings(repo):
     if p["dco"]:
         out.append(Finding("check", "dco", "The project uses Signed-off-by (DCO). Only the person can add their own "
                            "sign-off; never add it for them.", p["dco"]))
+    if p["cla"]:
+        out.append(Finding("check", "cla", "The project asks contributors to sign a Contributor License Agreement "
+                           "(CLA) before it can merge their work. Tell the person: only they can sign it, so never "
+                           "sign it or answer the CLA bot for them.", p["cla"]))
     for url in p["links"]:
         out.append(Finding("check", "policy-link", f"The policy links to {url}. Open it and read it before going on."))
 
@@ -745,6 +800,15 @@ AI_COAUTHOR = re.compile(r"(?im)^\s*co-authored-by:.*\b(claude|anthropic|copilot
                          r"devin|codex|aider|windsurf|cline|codeium|tabnine|jules|\[bot\])")
 AI_GENERATED = re.compile(r"(?im)\b(generated|created|made|written)\s+(with|by|using)\s+\[?(claude|copilot|chatgpt|"
                           r"cursor|codex|gemini|aider|windsurf|devin|ai)\b|🤖")
+CHANGELOG_NAME = re.compile(r"\b(?:CHANGES|NEWS|HISTORY)(?:\.(?:md|rst|txt|adoc))?\b|(?i:\bchange ?log(?:\.(?:md|rst|"
+                            r"txt|adoc))?\b|\b(?:changes|news|history)\.(?:md|rst|txt|adoc)\b)")
+CHANGELOG_ASK = re.compile(r"(?i)\b(?:add|update|include|edit|writ|append|record|document)\w*\b|\bentry\b|\bentries\b")
+CHANGELOG_NOT = re.compile(r"(?i)\bno need\b|\bdon'?t\b|\bdo not\b|\bnever\b|\bnot (?:necessary|required|needed)\b|"
+                           r"\bmaintainers? (?:will |)(?:update|edit|write|handle|add)|\bautomatic\w*|\bgenerated\b")
+CHANGELOG_CI = re.compile(r"(?i)towncrier\s+check|changeset\s+status|changeset-bot|reno\s+lint|news[- ]?fragments?|"
+                          r"chronographer|changelog[-_ ]?(?:enforcer|check|checker|required|lint)|"
+                          r"check[-_ ]?(?:changelog|news)|skip[- ](?:news|changelog)|no[- ]changelog")
+FRAGMENT_SKIP = re.compile(r"(?i)(^|/)(\.gitignore|\.gitkeep|readme[^/]*|template[^/]*|config\.json)$")
 
 
 def resolve_base(repo, base):
@@ -776,6 +840,87 @@ def parse_patch(patch):
         elif cur is not None and line.startswith("-"):
             cur["removed"].append(line[1:])
     return files
+
+
+def toml_section(text, name):
+    """The body of a [name] table in a TOML file, sub-tables included, or None."""
+    m = re.search(rf"(?m)^\[{re.escape(name)}\]\s*$", text)
+    if not m:
+        return None
+    rest = text[m.end():]
+    end = re.search(rf"(?m)^\[(?!\[?{re.escape(name)}[.\]])", rest)
+    return rest[: end.start()] if end else rest
+
+
+def changelog_rule(repo, tree):
+    """How the project wants changes recorded, from files it had before this change, or None.
+
+    Returns {"kind": "fragments", "tool", "dir", "pattern"} for news-fragment tools (towncrier, changesets, reno,
+    scriv, a changelog.d folder) or {"kind": "file", "file"} when the contributing guide or PR template asks for a
+    CHANGELOG entry, plus "where" (the evidence) and "enforced" (a CI job checks it)."""
+    repo = Path(repo)
+    wf = repo / ".github" / "workflows"
+    ci = " ".join(read_text(p) for p in sorted(wf.glob("*.y*ml"))[:30]) if wf.is_dir() else ""
+    enforced = bool(CHANGELOG_CI.search(ci))
+
+    def has_dir(d):
+        return any(t.startswith(d + "/") for t in tree)
+
+    def fragments(tool, d, where, pattern=None):
+        d = d.strip().strip("/").removeprefix("./")
+        return {"kind": "fragments", "tool": tool, "dir": d, "where": where, "enforced": enforced,
+                "pattern": pattern or rf"^{re.escape(d)}/"}
+
+    for cfg in ("towncrier.toml", ".towncrier.toml", "pyproject.toml"):
+        section = toml_section(read_text(repo / cfg), "tool.towncrier") if cfg in tree else None
+        if section is not None:
+            main_table = re.split(r"(?m)^\s*\[", section, maxsplit=1)[0]  # [[tool.towncrier.type]] has its own
+            m = re.search(r"(?m)^\s*directory\s*=\s*[\"']([^\"']+)[\"']", main_table)
+            if m:
+                return fragments("towncrier", m.group(1), cfg)
+            return fragments("towncrier", "newsfragments", cfg, r"(^|/)newsfragments/")
+    if ".changeset/config.json" in tree:
+        return fragments("changesets", ".changeset", ".changeset/config.json", r"^\.changeset/[^/]+\.md$")
+    if has_dir("releasenotes/notes"):
+        return fragments("reno", "releasenotes/notes", "releasenotes/notes/", r"^releasenotes/notes/[^/]+\.ya?ml$")
+    scriv, scriv_where = None, ""
+    if "pyproject.toml" in tree:
+        scriv, scriv_where = toml_section(read_text(repo / "pyproject.toml"), "tool.scriv"), "pyproject.toml"
+    if scriv is None and "scriv.ini" in tree:
+        scriv, scriv_where = read_text(repo / "scriv.ini"), "scriv.ini"
+    if scriv is None and "setup.cfg" in tree:
+        m = re.search(r"(?ms)^\[scriv\]\s*$(.*?)(?=^\[|\Z)", read_text(repo / "setup.cfg"))
+        scriv, scriv_where = (m.group(1), "setup.cfg") if m else (None, "")
+    if scriv is not None:
+        m = re.search(r"(?m)^\s*fragment_directory\s*[=:]\s*[\"']?([^\"'\s]+)", scriv)
+        return fragments("scriv", m.group(1) if m else "changelog.d", scriv_where)
+    for d in ("changelog.d", "newsfragments"):
+        if has_dir(d):
+            return fragments(f"a {d} folder", d, f"{d}/")
+
+    roots = sorted(t for t in tree if "/" not in t and re.match(r"(?i)(changelog|changes|news|history)\b", t))
+    if not roots:
+        return None
+    for kind, rel in candidate_files(repo):
+        if kind not in ("contributing", "template") or Path(rel).as_posix() not in tree:
+            continue
+        for n, line in enumerate(read_text(repo / rel).splitlines(), 1):
+            m = CHANGELOG_NAME.search(line)
+            if not m or not CHANGELOG_ASK.search(line) or CHANGELOG_NOT.search(line):
+                continue
+            named = m.group(0).lower().replace(" ", "")
+            target = next((t for t in roots if t.lower() == named), None) or \
+                next((t for t in roots if t.lower().startswith(named.split(".")[0])), None) or roots[0]
+            return {"kind": "file", "file": target, "where": f"{Path(rel).as_posix()}:{n}", "enforced": enforced}
+    return None
+
+
+def is_source_change(path):
+    """True for changes that usually need a changelog entry: not docs, tests, CI, lockfiles or dotfiles."""
+    p = path.replace("\\", "/")
+    if DOC_PATH.search(p) or TEST_PATH.search(p) or Path(p).name in LOCKS:
+        return False
+    return not (p.startswith((".github/", "docs/", "doc/", ".changeset/")) or ("/" not in p and p.startswith(".")))
 
 
 def diff_findings(repo, base=None):
@@ -884,6 +1029,26 @@ def diff_findings(repo, base=None):
         if todo:
             out.append(Finding("check", "todo-added", f"New TODO/FIXME in {path}. Finish it or explain it in the PR.",
                                path, short(todo[0])))
+
+    rule = changelog_rule(repo, tree)
+    if rule:
+        touched = [(k, p) for k, p, _ in changes if k != "D"] + [("?", p) for p in untracked]
+        level = "fix" if rule["enforced"] else "check"
+        if rule["kind"] == "fragments":
+            frag = re.compile(rule["pattern"])
+            added = [p for k, p in touched if k in ("A", "R", "?") and frag.search(p) and not FRAGMENT_SKIP.search(p)]
+            source = [p for _, p in touched if is_source_change(p) and not frag.search(p)]
+            if source and not added:
+                out.append(Finding(level, "changelog-missing", f"The project records each change as a separate file "
+                                   f"({rule['tool']}, in {rule['dir']}/), and this change adds none. Add one in the "
+                                   "project's format, or ask the maintainers whether this change needs it.",
+                                   rule["where"]))
+        else:
+            source = [p for _, p in touched if is_source_change(p) and p != rule["file"]]
+            if source and rule["file"] not in {p for _, p in touched}:
+                out.append(Finding(level, "changelog-missing", f"The project asks for an entry in {rule['file']} with "
+                                   "each change, and this change doesn't touch it. Add one if the change is "
+                                   "user-visible.", rule["where"]))
 
     nfiles = summary["files"]
     if nfiles > 15 or added_lines + removed_lines > 500:
@@ -1230,6 +1395,8 @@ BAD_LABEL = re.compile(r"(?i)needs[- ]triage|needs[- ]discussion|question|wontfi
                        r"not[- ]planned|blocked|on[- ]hold|stale")
 CLAIM = re.compile(r"(?i)\b(?:i(?:'d| would)? like to (?:work|take)|i'?ll (?:work|take|fix)|i'?m working on|can i "
                    r"(?:work|take)|assign (?:it to )?me|working on (?:this|it))\b")
+BEGINNER_LABEL = re.compile(r"(?i)good[- ]first|first[- ]timers?[- ]only|beginner")
+TAKEN = {"issue-closed", "issue-assigned", "issue-not-ready", "issue-claimed", "duplicate-pr", "issue-reserved"}
 
 
 class GhError(Exception):
@@ -1266,8 +1433,9 @@ def search_issues(query):
     return (data or {}).get("items", [])
 
 
-def issue_findings(repo, number):
-    """Is this issue open, unclaimed and wanted, and is someone already fixing it? Uses GitHub's REST API via gh."""
+def issue_findings(repo, number, policy=None):
+    """Is this issue open, unclaimed and wanted, and is someone already fixing it? Uses GitHub's REST API via gh.
+    When it is not available, lists other open issues to offer instead. `policy` is what read_policy returned."""
     out = []
     _, slug = github_slug(repo)
     if not slug:
@@ -1293,6 +1461,13 @@ def issue_findings(repo, number):
     good = [l for l in labels if GOOD_LABEL.search(l)]
     if bad:
         out.append(Finding("fix", "issue-not-ready", f"Labels say it is not ready for a fix: {', '.join(bad)}.", where))
+    reserved = bool(policy and "good-first-issues" in (policy.get("flags") or {}))
+    beginner = [l for l in labels if BEGINNER_LABEL.search(l)]
+    if reserved and beginner:
+        out.append(Finding("check", "issue-reserved", f"Issue #{number} is labeled '{beginner[0]}', and the project's "
+                           f"AI rules mention good first issues ({policy['flags']['good-first-issues']}). These are "
+                           "often kept for people learning the project: read that rule, and if so, pick another issue.",
+                           where))
     comments = []
     if issue.get("comments"):
         try:
@@ -1325,7 +1500,35 @@ def issue_findings(repo, number):
                                "Some projects limit how many a newcomer may have open."))
     except GhError:
         pass
+    if {f.code for f in out} & TAKEN and not (policy and policy.get("stance") == "not-accepted"):
+        out.append(other_issues(slug, number, skip_beginner=reserved))
     return out
+
+
+def other_issues(slug, number, skip_beginner=False, limit=5):
+    """Open issues nobody is assigned to, to offer when the chosen one is taken. Accepted ones come first."""
+    where = f"https://github.com/{slug}/issues"
+    try:
+        items = run_gh(["api", f"repos/{slug}/issues?state=open&sort=updated&per_page=50"]) or []
+    except GhError as e:
+        return Finding("check", "other-issues-unavailable", f"Could not list other open issues: {e}", where)
+    picks = []
+    for item in items:
+        if "pull_request" in item or item.get("number") == number or item.get("assignees"):
+            continue
+        labels = [l.get("name", "") for l in item.get("labels") or []]
+        if any(BAD_LABEL.search(l) for l in labels):
+            continue
+        if skip_beginner and any(BEGINNER_LABEL.search(l) for l in labels):
+            continue
+        picks.append((0 if any(GOOD_LABEL.search(l) for l in labels) else 1, item))
+    picks = [item for _, item in sorted(picks, key=lambda p: p[0])][:limit]
+    if not picks:
+        return Finding("info", "other-issues", "No other open, unassigned issue looks ready. Suggest the person ask "
+                       "the maintainers where help is wanted.", where)
+    listed = "; ".join(f"#{item['number']} {short(item.get('title') or '', 60)}" for item in picks)
+    return Finding("info", "other-issues", f"Other open issues nobody is assigned to, to offer the person instead: "
+                   f"{listed}. Check one with `check.py issue <number>` before starting.", where)
 
 
 def org_policy_findings(repo, local_stance):
@@ -1403,7 +1606,7 @@ def main(argv=None):
             sections.append(("Project rules", findings))
     if args.cmd == "issue" or (args.cmd == "all" and args.online and args.issue):
         number = args.number if args.cmd == "issue" else args.issue
-        sections.append((f"Issue #{number}", issue_findings(repo, number)))
+        sections.append((f"Issue #{number}", issue_findings(repo, number, policy or read_policy(repo))))
     if args.cmd in ("policy", "all", "pr", "report"):
         extra["policy"] = {"stance": policy["stance"], "disclosure": policy["disclosure"],
                            "flags": sorted(policy["flags"]), "block": policy["block"],

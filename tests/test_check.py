@@ -223,6 +223,47 @@ class PolicyTests(unittest.TestCase):
         self.assertIn("human-review", p["flags"])
         self.assertIn("dco", codes(f))
 
+    def test_cla(self):
+        for files in [{"CONTRIBUTING.md": "# Contributing\n\nBefore we can merge your pull request, you need to sign "
+                                          "our Contributor License Agreement (CLA).\n"},
+                      {"CONTRIBUTING.md": "# Contributing\n\nIf you haven't signed the CLA yet, the bot will ask you "
+                                          "to.\n"},
+                      {"README.md": "# demo\n\n[![CLA assistant](https://cla-assistant.io/readme/badge/acme/widget)]"
+                                    "(https://cla-assistant.io/acme/widget)\n"},
+                      {".github/pull_request_template.md": "- [ ] I have signed the Google CLA\n"}]:
+            with self.subTest(files=list(files)):
+                p, f, _ = self.stance(files)
+                self.assertIn("cla", codes(f, "check"))
+                self.assertTrue(p["cla"].startswith(next(iter(files))), p["cla"])
+
+    def test_cla_in_a_readme(self):
+        _, f, _ = self.stance({"README.md": "# widget\n\n## Contributing\n\nMost contributions require you to agree "
+                                            "to a Contributor License Agreement (CLA).\n"})
+        self.assertIn("cla", codes(f, "check"))
+        p, f, _ = self.stance({"README.md": "# lawbot\n\n## Features\n\nIt explains when a project needs a signed CLA "
+                                            "and how to read one.\n"})
+        self.assertNotIn("cla", codes(f))  # a README that talks about CLAs is not asking for one
+
+    def test_cla_bot_in_ci(self):
+        p, f, _ = self.stance({".github/workflows/cla.yml": "name: CLA Assistant\non: pull_request_target\njobs:\n"
+                                                            "  cla:\n    runs-on: ubuntu-latest\n    steps:\n"
+                                                            "      - uses: contributor-assistant/github-action@v2\n"})
+        self.assertIn("cla", codes(f, "check"))
+        self.assertEqual(p["cla"], ".github/workflows/cla.yml:1")
+
+    def test_no_cla(self):
+        for text in ["No CLA is required: by contributing you agree to license your work under the MIT license.",
+                     "We don't require a Contributor License Agreement.",
+                     "There is no need to sign a CLA.",
+                     "A CLA is not required.",
+                     "You can contribute without signing a CLA.",
+                     "Since we do not have a formal [Contributor License Agreement](https://en.wikipedia.org/wiki/"
+                     "Contributor_license_agreement) (CLA), you retain your copyright to your changes."]:
+            with self.subTest(text=text):
+                p, f, _ = self.stance({"CONTRIBUTING.md": f"# Contributing\n\n{text}\n"})
+                self.assertNotIn("cla", codes(f))
+                self.assertEqual(p["cla"], "")
+
     def test_known_list_exact_and_org(self):
         _, f, known = self.stance({}, remote="https://github.com/alacritty/alacritty.git")
         self.assertEqual(known["project"], "Alacritty")
@@ -344,6 +385,77 @@ class DiffTests(unittest.TestCase):
         self.assertIn("no-base", codes(findings, "fix"))
 
 
+class ChangelogTests(unittest.TestCase):
+    """Projects that want a changelog entry with each change, and changes that forget it."""
+
+    CODE = {"src/app.py": "def add(a, b):\n    return a + b\n"}
+    TOWNCRIER = {"pyproject.toml": "[project]\nname = 'demo'\n\n[tool.towncrier]\ndirectory = \"changes\"\n\n"
+                                   "[[tool.towncrier.type]]\ndirectory = \"bugfix\"\nname = \"Bug fixes\"\n\n"
+                                   "[tool.ruff]\nline-length = 100\n",
+                 "changes/.gitkeep": ""}
+
+    def missing(self, files, change, level=None):
+        r = Repo({**self.CODE, **files})
+        try:
+            r.write(change)
+            r.commit("change")
+            findings, _ = check.diff_findings(r.path, "main")
+            return [f for f in findings if f.code == "changelog-missing" and (level is None or f.level == level)]
+        finally:
+            r.cleanup()
+
+    def test_towncrier(self):
+        found = self.missing(self.TOWNCRIER, {"src/app.py": "def add(a, b):\n    return b + a\n"}, "check")
+        self.assertEqual(len(found), 1)
+        self.assertIn("towncrier, in changes/", found[0].message)
+        self.assertEqual(found[0].where, "pyproject.toml")
+        self.assertEqual(self.missing(self.TOWNCRIER, {"src/app.py": "def add(a, b):\n    return b + a\n",
+                                                       "changes/42.bugfix.md": "Fix the order.\n"}), [])
+        default = {"towncrier.toml": "[tool.towncrier]\npackage = 'demo'\n\n[[tool.towncrier.type]]\n"
+                                     "directory = \"bugfix\"\nname = \"Bug fixes\"\n"}
+        found = self.missing(default, {"src/app.py": "x = 1\n"})
+        self.assertIn("towncrier, in newsfragments/", found[0].message)
+        self.assertEqual(self.missing(default, {"src/app.py": "x = 1\n",
+                                                "src/demo/newsfragments/42.bugfix": "Fix.\n"}), [])
+
+    def test_enforced_in_ci_needs_fixing(self):
+        ci = {".github/workflows/news.yml": "jobs:\n  news:\n    steps:\n      - run: towncrier check\n"}
+        found = self.missing({**self.TOWNCRIER, **ci}, {"src/app.py": "def add(a, b):\n    return b + a\n"}, "fix")
+        self.assertEqual(len(found), 1)
+
+    def test_docs_and_tests_need_no_entry(self):
+        self.assertEqual(self.missing(self.TOWNCRIER, {"docs/usage.md": "Use add().\n",
+                                                       "tests/test_app.py": "def test_x():\n    assert True\n"}), [])
+
+    def test_changesets_and_reno(self):
+        changesets = {".changeset/config.json": "{}\n", ".changeset/README.md": "Changesets live here.\n"}
+        self.assertEqual(len(self.missing(changesets, {"src/app.py": "x = 1\n", ".changeset/README.md": "edit\n"})), 1)
+        self.assertEqual(self.missing(changesets, {"src/app.py": "x = 1\n", ".changeset/brave-dogs.md": "fix\n"}), [])
+        reno = {"releasenotes/notes/first-a1b2.yaml": "fixes:\n  - First.\n"}
+        found = self.missing(reno, {"src/app.py": "x = 1\n"})
+        self.assertIn("reno, in releasenotes/notes/", found[0].message)
+        self.assertEqual(self.missing(reno, {"src/app.py": "x = 1\n",
+                                             "releasenotes/notes/order-c3d4.yaml": "fixes:\n  - Order.\n"}), [])
+
+    def test_changelog_file_asked_for(self):
+        files = {"CHANGELOG.md": "# Changelog\n\n## Unreleased\n",
+                 "CONTRIBUTING.md": "# Contributing\n\nPlease add an entry to CHANGELOG.md for every user-visible "
+                                    "change.\n"}
+        found = self.missing(files, {"src/app.py": "x = 1\n"}, "check")
+        self.assertEqual(found[0].where, "CONTRIBUTING.md:3")
+        self.assertIn("CHANGELOG.md", found[0].message)
+        self.assertEqual(self.missing(files, {"src/app.py": "x = 1\n",
+                                              "CHANGELOG.md": "# Changelog\n\n## Unreleased\n\n- Fix add.\n"}), [])
+
+    def test_no_entry_wanted(self):
+        for text in ["Don't edit CHANGELOG.md; maintainers update it when they release.",
+                     "The changelog is generated automatically from commit messages."]:
+            with self.subTest(text=text):
+                files = {"CHANGELOG.md": "# Changelog\n", "CONTRIBUTING.md": f"# Contributing\n\n{text}\n"}
+                self.assertEqual(self.missing(files, {"src/app.py": "x = 1\n"}), [])
+        self.assertEqual(self.missing({}, {"src/app.py": "x = 1\n"}), [])  # no changelog at all
+
+
 SLOP_PR = """## 🚀 Summary
 
 This PR introduces a comprehensive and robust enhancement that seamlessly improves the overall experience. ✨
@@ -389,12 +501,16 @@ class OnlineTests(unittest.TestCase):
         check.run_gh = self.real_gh
         self.r.cleanup()
 
-    def fake(self, issue, comments=(), prs=(), mine=(), org=None):
+    def fake(self, issue, comments=(), prs=(), mine=(), org=None, open_issues=()):
         def run_gh(args):
             self.calls.append(args)
             path = next((a for a in args if a.startswith(("repos/", "search/"))), "")
             if path.endswith("/comments?per_page=100"):
                 return list(comments)
+            if path.startswith("repos/acme/widget/issues?"):
+                if open_issues is None:
+                    raise check.GhError("HTTP 403: rate limit")
+                return list(open_issues)
             if path.startswith("repos/acme/widget/issues/"):
                 return issue
             if path == "search/issues":
@@ -416,6 +532,67 @@ class OnlineTests(unittest.TestCase):
         f = check.issue_findings(self.r.path, 12)
         self.assertEqual(codes(f, "fix"), set())
         self.assertNotIn("issue-not-accepted", codes(f))
+        self.assertNotIn("other-issues", codes(f))  # nothing to replace
+
+    TAKEN = {"title": "x", "state": "open", "assignees": [{"login": "bob"}], "html_url": "u", "labels": [],
+             "comments": 0}
+
+    def test_other_issues_when_taken(self):
+        self.fake(self.TAKEN, open_issues=[
+            {"number": 12, "title": "This one"},
+            {"number": 13, "title": "A pull request", "pull_request": {}},
+            {"number": 14, "title": "Taken too", "assignees": [{"login": "amy"}]},
+            {"number": 15, "title": "Won't fix", "labels": [{"name": "wontfix"}]},
+            {"number": 16, "title": "Plain bug"},
+            {"number": 17, "title": "Wanted fix", "labels": [{"name": "help wanted"}]}])
+        f = check.issue_findings(self.r.path, 12)
+        other = next(x for x in f if x.code == "other-issues")
+        self.assertEqual(other.level, "info")
+        self.assertIn("#17 Wanted fix", other.message)
+        self.assertIn("#16 Plain bug", other.message)
+        self.assertLess(other.message.index("#17"), other.message.index("#16"))  # accepted ones first
+        self.assertNotRegex(other.message, r"#1[2-5]\b")
+
+    def test_good_first_issue_kept_for_newcomers(self):
+        policy = {"stance": "restricted", "flags": {"good-first-issues": "CONTRIBUTING.md:5"}}
+        self.fake({"title": "x", "state": "open", "assignees": [], "html_url": "u", "comments": 0,
+                   "labels": [{"name": "good first issue"}]},
+                  open_issues=[{"number": 20, "title": "Easy one", "labels": [{"name": "good first issue"}]},
+                               {"number": 21, "title": "Regular bug", "labels": [{"name": "bug"}]}])
+        f = check.issue_findings(self.r.path, 12, policy)
+        self.assertIn("issue-reserved", codes(f, "check"))
+        other = next(x for x in f if x.code == "other-issues")
+        self.assertIn("#21", other.message)
+        self.assertNotIn("#20", other.message)
+        self.fake({"title": "x", "state": "open", "assignees": [], "html_url": "u", "comments": 0,
+                   "labels": [{"name": "good first issue"}]})
+        self.assertNotIn("issue-reserved", codes(check.issue_findings(self.r.path, 12)))  # no such rule
+
+    def test_no_other_issues_when_the_project_bans_ai(self):
+        self.fake(self.TAKEN, open_issues=[{"number": 16, "title": "Plain bug"}])
+        f = check.issue_findings(self.r.path, 12, {"stance": "not-accepted", "flags": {}})
+        self.assertNotIn("other-issues", codes(f))
+
+    def test_other_issues_unavailable_or_none(self):
+        self.fake(self.TAKEN, open_issues=None)
+        self.assertIn("other-issues-unavailable", codes(check.issue_findings(self.r.path, 12), "check"))
+        self.fake(self.TAKEN, open_issues=[{"number": 12, "title": "This one"}])
+        other = next(x for x in check.issue_findings(self.r.path, 12) if x.code == "other-issues")
+        self.assertIn("ask the maintainers", other.message)
+
+    def test_issue_command_reads_the_local_policy(self):
+        self.r.write({"CONTRIBUTING.md": "# Contributing\n\n## AI\n\nAI-assisted pull requests are welcome if you "
+                                         "disclose them. Please don't use AI tools on good first issues: those are "
+                                         "kept for newcomers.\n"})
+        self.r.commit("contributing")
+        self.fake({"title": "x", "state": "open", "assignees": [], "html_url": "u", "comments": 0,
+                   "labels": [{"name": "good first issue"}]},
+                  open_issues=[{"number": 21, "title": "Regular bug"}])
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            check.main(["issue", "12", "--repo", str(self.r.path), "--json"])
+        found = {f["code"] for f in json.loads(buf.getvalue())["sections"]["Issue #12"]}
+        self.assertTrue({"issue-reserved", "other-issues"} <= found)
 
     def test_closed_assigned_unaccepted_claimed_and_duplicate(self):
         self.fake({"title": "x", "state": "closed", "assignees": [{"login": "bob"}], "html_url": "u",
