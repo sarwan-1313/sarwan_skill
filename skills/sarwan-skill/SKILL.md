@@ -4,7 +4,7 @@ description: Rules for AI coding agents that contribute to open-source projects 
 license: MIT
 metadata:
   author: sarwan-1313
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # sarwan_skill: no slop pull requests
@@ -67,7 +67,7 @@ The checker in this skill's folder points at the lines that matter: `python3 <th
 
 ## The guard
 
-With the Claude Code plugin, the same checks run automatically before `git push`, a pull request, a patch email (`git send-email`, `b4 send`) or a new issue to someone else's project. If the project doesn't accept AI help, the command is blocked. If something needs fixing, the person is asked. Fix the cause; never switch the guard off yourself (`SARWAN_SKILL_GUARD=off` is the person's choice), and never use `--no-verify` or `--no-validate`. With other agents, offer to add the same check as git hooks: `python3 <this-skill-folder>/scripts/guard.py install --repo <repo>`.
+With the Claude Code plugin, the same checks run automatically before `git push`, a pull request, a patch email (`git send-email`, `b4 send`) or a new issue to someone else's project. If the project doesn't accept AI help, the command is blocked. If the project wants a person to submit, or something needs fixing, the person is asked; give them the branch and the text, and let them decide. Fix the cause; never switch the guard off yourself (`SARWAN_SKILL_GUARD=off` is the person's choice), and never use `--no-verify` or `--no-validate`. With other agents, offer to add the same check as git hooks: `python3 <this-skill-folder>/scripts/guard.py install --repo <repo>`.
 
 ## When maintainers answer
 

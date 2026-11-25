@@ -10,17 +10,32 @@ Before your agent touches someone else's project, it reads that project's AI pol
 
 ![sarwan_skill stopping a patch to QEMU, catching a slop contribution, guarding a pull request and writing a policy block](demo/demo.gif)
 
+## The two rules agents don't follow
+
+In [RepoComplianceBench](https://arxiv.org/abs/2607.26819) (Peking University, July 2026), four coding agents, Claude Code and Codex among them, scored **0%** on two kinds of project rule: refusing when a project bans AI contributions, and handing the final step to a person when the project asks for that. Reminders and quoting the rule didn't help.
+
+sarwan_skill's guard enforces both at the moment the agent runs `gh pr create`. On 78 real projects ([details and script](eval/refuse-handoff/)):
+
+| Rule | Development set (62 projects) | Unseen projects (16), first run |
+| --- | --- | --- |
+| The project bans AI contributions | **25/25 blocked** | 5/10 blocked, 5/10 paused for the person |
+| A person must submit | **10/10 handed to the person** | 1/3 |
+| The project allows AI | 0/37 wrongly blocked | 0/4 wrongly blocked |
+
+The unseen projects' misses were fixed: they are now 9/10 blocked and 3/3 handed off. No pull request to a project whose files ban AI got through silently, in any run.
+
 ## Highlights
 
 - **Reads the house rules first.** It finds AI policies in CONTRIBUTING files, AI_POLICY files and PR templates, and it knows the published policies of 189 projects.
 - **Stops at the source.** Other anti-slop tools act after a pull request arrives. This one acts before the pull request exists.
-- **Enforces, not just advises.** In Claude Code, a hook blocks pushes, pull requests, patch emails and new issues to a project that doesn't accept AI help.
+- **Enforces, not just advises.** In Claude Code, a hook blocks pushes, pull requests, patch emails and new issues to a project that doesn't accept AI help, and hands the step to you when a project wants a person to submit.
 - **Catches the usual slop.** It flags agent files left in the diff, skipped tests, lockfile churn, AI co-author lines, missing changelog entries, filler PR text, and files or functions the text cites that don't exist.
 - **Works for both sides.** Contributors get the checks, and maintainers get **ai-policy-writer** to publish rules agents can read exactly.
 - **Light and private.** Python standard library only, no network calls by default, and about 400 tokens per session until it's needed.
 
 ## Contents
 
+- [The two rules agents don't follow](#the-two-rules-agents-dont-follow)
 - [Why](#why)
 - [Before and after](#before-and-after)
 - [Install](#install)
@@ -164,6 +179,7 @@ Rules are advice; the guard makes them stick. With the Claude Code plugin, the c
 | Situation | What happens |
 | --- | --- |
 | The project doesn't accept AI help | The command is blocked, and the agent is told to stop and tell you |
+| The project wants a person, not an agent, to submit | You're asked before the pull request, issue or patch email goes out, with the rule quoted |
 | Something needs fixing | You're asked before the command runs, with the list of problems |
 | All clear, or it's your own repository or fork | Nothing |
 
@@ -214,7 +230,7 @@ These tools solve different problems and work well together. sarwan_skill covers
 
 ## Tested on real projects
 
-The policy reader was checked against the published AI policies of 72 real projects ([eval/](eval/)). On the last 32, which the patterns had never seen, it agreed with the public policy list on 27, said "unclear, ask the person" on 4, and misread 1. Those wordings are now fixed and covered by tests. In all, 104 automated tests cover the checker, the guard, the policy writer and the before-and-after scoring.
+The policy reader was checked against the published AI policies of 72 real projects ([eval/](eval/)). On the last 32, which the patterns had never seen, it agreed with the public policy list on 27, said "unclear, ask the person" on 4, and misread 1. Those wordings are now fixed and covered by tests. The guard itself was then run on 78 projects ([eval/refuse-handoff/](eval/refuse-handoff/)), as summarized [at the top](#the-two-rules-agents-dont-follow). In all, 110 automated tests cover the checker, the guard, the policy writer and the before-and-after scoring.
 
 ## FAQ
 

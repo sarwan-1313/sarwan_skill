@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0
+
+- **Handoff.** When a project wants a person, not an agent, to submit ("AI agents must not open pull requests", "a human must be the one to submit", `agent-opened-prs: no`), the Claude Code guard now pauses `gh pr create`, `gh issue create` and patch emails and asks you, quoting the rule. Git hooks don't do this, since there the person may be the one running git. These rules are also found outside AI sections and in `AGENTS.md`.
+- **Better ban reading**, after running the guard on 16 projects it had never seen. A pull request template that makes every contributor certify no AI was used now counts as a ban, and "No LLM, AI or agent assisted contributions are allowed" is no longer read as permission. "Coordinated disclosure" in a security note and "disclosure does not make it acceptable" no longer count as disclosure rules. "Have not included" and "merged" are now recognized, and a dedicated AI policy file that says no wins over an older template.
+- **Refuse and handoff evaluation** on 78 real projects ([eval/refuse-handoff/](eval/refuse-handoff/)): 25/25 bans blocked and 10/10 handoffs on the development set, and no project that allows AI was blocked. On the unseen projects the first run blocked 5/10 bans and paused the rest; after the fixes above it blocks 9/10 and hands off 3/3.
+- 6 new tests, 110 in all.
+
 ## 1.3.0
 
 - **Other issues to work on.** When `check.py issue <number>` finds the issue taken (closed, assigned, claimed, not ready, already being fixed, or a good first issue the project keeps for newcomers), it now lists up to five other open, unassigned issues to offer the person, accepted ones first. It suggests nothing when the project doesn't accept AI help at all.

@@ -167,8 +167,15 @@ def summarize(findings, levels):
     return "\n".join(lines[:8])
 
 
-def decide(repo, command, key=None, action=None):
-    """Return (decision, reason). decision is 'allow', 'ask' or 'deny'."""
+HANDOFF_ACTIONS = ("pull request", "issue", "patch email")
+
+
+def decide(repo, command, key=None, action=None, agent=False):
+    """Return (decision, reason). decision is 'allow', 'ask' or 'deny'.
+
+    `agent` is True when an AI agent is about to run the command (the Claude Code hook). Then a project rule that a
+    person must submit the work hands the step to the person (ask) instead of letting the agent send it. Git hooks
+    pass False, because the person may be the one running git."""
     if os.environ.get("SARWAN_SKILL_GUARD", "").lower() in ("off", "0", "false"):
         return "allow", "guard turned off by SARWAN_SKILL_GUARD"
     if action is None:
@@ -185,9 +192,19 @@ def decide(repo, command, key=None, action=None):
     if level == "stop":
         return "deny", (f"sarwan_skill: this {action} goes to {where}, and the project's rules say stop:\n"
                         f"{summarize(findings, ('stop',))}\nStop and tell the person.")
-    if level == "fix" and elsewhere:
-        return "ask", (f"sarwan_skill found things to fix before this {action} goes to {where}:\n"
-                       f"{summarize(findings, ('fix',))}\nApprove only if you have read them and want to send it anyway.")
+    handoff = next((f for f in findings if f.code == "flag-no-autonomous-agents"), None) \
+        if agent and action in HANDOFF_ACTIONS else None
+    if elsewhere and (level == "fix" or handoff):
+        parts = []
+        if handoff:
+            parts.append(f"sarwan_skill: {where} wants a person, not an agent, to send this {action} "
+                         f"(see {handoff.where}). Hand this step to the person: show them the branch and the text, "
+                         "and let them decide whether to send it.")
+        if level == "fix":
+            parts.append(f"sarwan_skill found things to fix before this {action} goes to {where}:\n"
+                         f"{summarize(findings, ('fix',))}")
+        parts.append("Approve only if you, the person, have read this and want to send it.")
+        return "ask", "\n".join(parts)
     return "allow", "checks passed"
 
 
@@ -209,7 +226,7 @@ def claude_code_hook():
         m = re.search(r"\bgit\s+-C\s+(\S+)", command)
         if m:
             repo = (repo / m.group(1).strip("'\"")).resolve()
-        decision, reason = decide(repo, command)
+        decision, reason = decide(repo, command, agent=True)
     except Exception as exc:  # never break the person's session
         print(f"sarwan_skill guard skipped: {exc}", file=sys.stderr)
         return 0

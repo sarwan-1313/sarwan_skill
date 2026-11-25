@@ -189,7 +189,11 @@ SIGNALS = {
         r"(?i)\b(?:do|does|did|will|must|may|can|shall|should|have|has|had)\s*(?:not|n't)\s+(?:\w+\s+){0,2}?(?:accept|"
         r"allow|permit|merge|take|consider|review|used?|using|submit|send|open|include|incorporate|contain|contribute|"
         r"post|file)"
-        r"(?:s|ed|ing)?\b[^.;:]{0,80}?" + T,
+        r"(?:s|d|ed|ing)?\b[^.;:]{0,80}?" + T,
+        r"(?i)\b(?:believes?|suspects?|thinks?|finds?|found)\b[^.;]{0,60}?" + T + r"[^.;]{0,40}?\b(?:may|will|can|might)"
+        r"\s+(?:\w+\s+)?(?:close|reject|remove|revert)",
+        r"(?i)\bdiscloses?\s+(?:the\s+)?(?:use of\s+)?" + T + r"[^.;]{0,40}?\b(?:may|will)\s+be\s+(?:\w+\s+)?(?:closed|"
+        r"rejected)",
         r"(?i)\b(?:never|won't|cannot|can't)\s+(?:\w+\s+){0,2}?(?:accept|allow|permit|merge|take|consider)"
         r"(?:s|ed|ing)?\b[^.;:]{0,80}?" + T,
         r"(?i)" + T + r"[^.;:]{0,160}?\b(?:(?:is|are|will be)\s+(?:strictly\s+|expressly\s+|explicitly\s+)?(?:not\s+"
@@ -250,6 +254,11 @@ MINOR_USE = re.compile(r"(?i)proofread|translat|grammar|spell|research|brainstor
 
 
 EMPHASIS = re.compile(r"(?<!\w)[*_]+|[*_]+(?!\w)")  # markdown **bold** and _italic_ markers
+NO_SUBJECT = re.compile(r"(?i)^\W*(?:no|none of|neither)\b")  # "No AI ... contributions are allowed"
+NOT_AI_DISCLOSURE = re.compile(r"(?i)\b(?:coordinated|responsible|vulnerability|security|full)\s+disclosure\b|"
+                               r"\bdisclosure\s+(?:process|policy|program|timeline)\b|\bdisclos\w*\s+(?:does|will|would|"
+                               r"did)\s*(?:not|n't)\s+make\b|\bdiscloses?\s+(?:the\s+)?(?:use of\s+)?(?:AI|LLM)\w*[^.;]"
+                               r"{0,40}?\b(?:may|will)\s+be\s+(?:\w+\s+)?(?:closed|rejected)")
 
 
 def sentence_at(text, start, end):
@@ -277,9 +286,14 @@ def scan_signals(text):
             found.add("ban-partial" if partial else "ban-core")
     for pat in SIGNALS["allow"]:
         for m in pat.finditer(text):
-            found.add("allow-minor" if MINOR_USE.search(sentence_at(text, m.start(), m.end())) else "allow-strong")
-    if any(p.search(text) for p in SIGNALS["disclose"]):
-        found.add("disclose")
+            s = sentence_at(text, m.start(), m.end())
+            if NO_SUBJECT.search(s):
+                continue
+            found.add("allow-minor" if MINOR_USE.search(s) else "allow-strong")
+    for pat in SIGNALS["disclose"]:
+        if any(not NOT_AI_DISCLOSURE.search(sentence_at(text, m.start(), m.end())) for m in pat.finditer(text)):
+            found.add("disclose")
+            break
     return found
 
 
@@ -304,9 +318,28 @@ FLAGS = {
                      r"(?:line|change|code|output)|\bhuman[- ]in[- ]the[- ]loop\b|\b(?:you are|you're|contributors?"
                      r" (?:is|are))\s+(?:fully\s+)?(?:responsible|accountable)\b",
                      "The person submitting must understand and stand behind every change."),
-    "no-autonomous-agents": (r"(?i)\b(?:autonomous|unattended|fully[- ]automated)\s+(?:AI\s+)?(?:agents?|bots?|"
-                             r"tools?|contributions?|pull requests?|PRs?)\b|\bagents?\s+(?:must|may|should|shall)\s+"
-                             r"not\s+(?:open|submit|create|push|file)",
+    "no-autonomous-agents": (r"(?i)\b(?:autonomous|unattended|unsupervised|fully[- ]automated)(?:\s+or\s+\w+)?\s+"
+                             r"(?:AI\s+)?(?:coding\s+)?(?:agents?|bots?|tools?|workflows?|contributions?|pull requests?|"
+                             r"PRs?)\b|"
+                             r"\b(?:submit|open|create|file|post)\w*\s+(?:an?\s+|the\s+)?(?:pull requests?|PRs?|issues?|"
+                             r"patches)\s+autonomously\b|"
+                             r"\bagents?\s+(?:must|may|should|shall|can)\s*(?:not|never|n't)\s+(?:\w+\s+){0,3}?"
+                             r"(?:open|submit|create|push|file|send|post)|"
+                             r"\b(?:do not|don't|never)\s+(?:use|let|allow)\s+(?:an?\s+)?(?:AI\s+)?(?:coding\s+)?agents?\b"
+                             r"[^.\n]{0,40}\b(?:open|submit|create|file|send|post)|"
+                             r"\b(?:pull requests?|PRs?|merge requests?|issues?|patches|contributions?)\s+(?:must|should)\s+"
+                             r"be\s+(?:opened|submitted|created|filed|sent|made)\s+by\s+(?:a\s+)?(?:human|person)|"
+                             r"\bbe the one (?:to|who)\s+(?:submit|open|send|file)s?\b|"
+                             r"\bwithout\s+(?:explicit\s+)?(?:human|user|maintainer)\s+(?:approval|consent|"
+                             r"confirmation|sign-?off)\b|"
+                             r"\b(?:created|generated|written|produced|authored|made)\s+(?:substantially|entirely|fully|"
+                             r"mostly|primarily|wholly|largely|completely)\s+(?:by|with|using)\s+(?:an?\s+)?(?:AI|LLMs?|"
+                             r"agents?|automated)[^.\n]{0,60}\b(?:not\s+(?:be\s+)?(?:accepted|allowed|permitted|welcome)|"
+                             r"rejected|closed|refused|declined)|"
+                             r"\b(?:automated accounts?|bots|agents)\b[^.\n]{0,40}\b(?:are|is)\s+not\s+(?:accepted|"
+                             r"allowed|permitted|welcome)|"
+                             r"\b(?:agents?|bots?|AI|LLMs?)\b[^.\n]{0,40}\b(?:post|open|submit|comment|reply|respond|"
+                             r"speak|send|file|act)\w*\b[^.\n]{0,30}\bon (?:your|their) behalf\b",
                              "No autonomous agents: a person drives the work and submits it."),
     "human-written-text": (r"(?i)\bin your own words\b|\bwritten by (?:a )?(?:human|person|you|yourself)\b|"
                            r"\bwrite\s+(?:\w+\s+){0,3}?yourself\b|\bnot\s+(?:be\s+)?(?:written|generated)\s+(?:by|with)"
@@ -420,7 +453,7 @@ def read_policy(repo):
     repo = Path(repo)
     files = candidate_files(repo)
     hits, block, block_where, block_problems, links, dco_where, agents_files, templates = [], None, "", [], [], "", [], []
-    cla_where = ""
+    cla_where, handoff, certifications = "", {}, {}
 
     for kind, rel in files:
         text = read_text(repo / rel)
@@ -443,8 +476,16 @@ def read_policy(repo):
                 if DCO.search(line):
                     dco_where = f"{rel}:{n}"
                     break
+        if kind in ("contributing", "ai-policy", "agents") and "no-autonomous-agents" not in handoff:
+            # "A person must submit" rules are clear on their own, so look in every section, and in AGENTS.md,
+            # whose rules are addressed to agents directly.
+            for _, start, lines in paragraphs(text):
+                if FLAGS["no-autonomous-agents"][0].search(" ".join(l.strip() for l in lines)):
+                    handoff["no-autonomous-agents"] = f"{rel.as_posix()}:{start}"
+                    break
         if kind == "agents":
             continue  # instructions for AI tools, not the contribution policy; reported separately
+        cert = certifications.setdefault(str(rel), []) if kind == "template" else None
         for heading, start, lines in paragraphs(text):
             body = " ".join(l.strip() for l in lines)
             in_ai_heading = bool(AI_TERM.search(heading)) and bool(POLICY_HEADING.search(heading) or kind != "readme")
@@ -454,13 +495,16 @@ def read_policy(repo):
             signals = set()
             prose = []
             for line in lines:
-                if CHECKBOX.match(line) and AI_TERM.search(line):
+                listed_claim = cert is not None and re.match(r"^\s*[-*+]\s+", line) and re.search(r"\bI\b", line)
+                if (CHECKBOX.match(line) or listed_claim) and AI_TERM.search(line):
                     # "[ ] No LLMs were used" means AI is not accepted. "[ ] I used AI and say how", or a choice
                     # like "I read the AI guidelines, or I am not using AI", means it is accepted with disclosure.
                     pure_no = NEGATION.search(line) and not re.search(
                         r"(?i)\bor\s+(?:I|you|we)\b|guideline|responsib|understand|disclos|describ|explain|review", line)
                     in_line = scan_signals(CHECKBOX.sub("", line))
                     signals.add("ban-core" if pure_no or "ban-core" in in_line else "disclose")
+                    if cert is not None:
+                        cert.append((bool(pure_no and CORE_SCOPE.search(line)), f"{rel.as_posix()}:{start}"))
                 else:
                     prose.append(line.strip())
             signals |= scan_signals(" ".join(prose))
@@ -479,12 +523,21 @@ def read_policy(repo):
 
     signals = set().union(*[h["signals"] for h in hits]) if hits else set()
     prose_stance = decide_stance(signals, bool(hits))
+    policy_file_signals = set().union(*[h["signals"] for h in hits if h["kind"] == "ai-policy"]) if hits else set()
+    if decide_stance(policy_file_signals, False) == "not-accepted":
+        # A dedicated AI policy file that says no is the project's answer, even when an older PR template or a
+        # README still offers AI-assisted options.
+        prose_stance = "not-accepted"
+    if any(c and all(no for no, _ in c) for c in certifications.values()):
+        # The pull request template makes every contributor certify that no AI was used for the change, with no
+        # AI-assisted option to pick instead. An agent can never tick that truthfully.
+        prose_stance = "not-accepted"
     if block and block.get("ai-assistance"):
         a, d = block["ai-assistance"], block.get("disclosure", "")
         stance = {"not-accepted": "not-accepted", "ask-first": "ask-first"}.get(a) or \
             ("allowed" if d == "not-needed" else "disclose" if d else "allowed")
     else:
-        stance = decide_stance(signals, bool(hits))
+        stance = prose_stance
 
     all_text = " ".join(h["text"] for h in hits)
     if block and block.get("disclosure"):
@@ -502,6 +555,8 @@ def read_policy(repo):
     for h in hits:
         for f in h["flags"]:
             flags.setdefault(f, f"{h['file']}:{h['line']}")
+    for f, where in handoff.items():
+        flags.setdefault(f, where)
     if block:
         if block.get("issue-first") == "yes":
             flags.setdefault("issue-first", block_where)
