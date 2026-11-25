@@ -42,7 +42,7 @@ Each label was checked against the text in the repository at the tested commit. 
 | AI allowed: wrongly handed off | 0/27 | 0/1 | 0/1 |
 | No AI disclosure where it's wanted: asked | 36/37 | 4/4 | 4/4 |
 
-**When the ban is in the project's own files, no pull request got through silently, in any run.** Every one was either blocked or paused for the person. A ban that lives only on a website can't be read from the repository: without the bundled list, Servo's got through.
+**When the ban is in the project's own files, no pull request got through silently, in any run.** Every one was either blocked or paused for the person. A ban that lives only on a website can't be read from the repository: without the bundled list, Servo's got through, and so did OpenJDK's when the pull request disclosed AI help.
 
 The first-run column is the fair number for unseen projects. The "now" column comes after fixing what the first run found, so it's no longer a blind test:
 
@@ -53,7 +53,7 @@ The first-run column is the fair number for unseen projects. The "now" column co
 - pdfcpu: "coordinated disclosure" in a security note was read as a disclosure rule.
 - scikit-learn and llama.cpp: "a person must submit" rules in a section without the word AI, or in `AGENTS.md`, were missed.
 
-The one ban still not blocked is pdfcpu, which rejects pull requests "created substantially by AI tools". The guard hands that step to the person with the rule quoted, because it can't tell how much of a change the person wrote. OpenJDK's ban is only on its website; the pull request template links to it, and the guard pauses and asks for disclosure.
+The one ban still not blocked is pdfcpu, which rejects pull requests "created substantially by AI tools". The guard hands that step to the person with the rule quoted, because it can't tell how much of a change the person wrote. OpenJDK's ban is only on its website. With the bundled list the guard pauses and quotes it; without the list, it only asks for the disclosure that the pull request template links to.
 
 ## Limits
 
