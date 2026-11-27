@@ -20,5 +20,10 @@
   "skills": [
     "./skills/sarwan-skill",
     "./skills/ai-policy-writer"
-  ]
+  ],
+  "network": {
+    "hosts": [
+      "api.github.com"
+    ]
+  }
 }
