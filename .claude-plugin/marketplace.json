@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "No slop pull requests: make AI coding agents good open-source contributors.",
-    "version": "1.2.0"
+    "version": "1.3.0"
   },
   "plugins": [
     {
       "name": "sarwan-skill",
       "source": "./",
       "description": "Reads a project's AI policy first, keeps diffs small, runs the project's own checks, blocks risky pushes, and writes honest, disclosed pull requests. Includes an AI policy writer for maintainers.",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "author": {
         "name": "sarwan-1313"
       },

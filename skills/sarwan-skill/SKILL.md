@@ -4,7 +4,7 @@ description: Rules for AI coding agents that contribute to open-source projects 
 license: MIT
 metadata:
   author: sarwan-1313
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # sarwan_skill: no slop pull requests
@@ -29,7 +29,7 @@ The checker in this skill's folder points at the lines that matter: `python3 <th
 
 **Work only on something the maintainers want.**
 
-- Find the issue this solves. Check that it is open, nobody is assigned or has claimed it, and a maintainer agreed it should be fixed. `check.py issue <number> --repo <repo>` does this through the GitHub CLI.
+- Find the issue this solves. Check that it is open, nobody is assigned or has claimed it, and a maintainer agreed it should be fixed. `check.py issue <number> --repo <repo>` does this through the GitHub CLI. If the issue is taken, it also lists other open issues: offer those to the person.
 - Search open pull requests for the same fix (the issue check lists them). If one exists, help the person review or test it instead.
 - No issue yet? Draft one for the person to post, and wait for a maintainer before writing code.
 - Reproduce a bug before fixing it. Never let the person send a bug or security report that you have not confirmed with a real run. Check a report draft with `check.py report <file> --repo <repo>`.
@@ -50,6 +50,7 @@ The checker in this skill's folder points at the lines that matter: `python3 <th
 
 - `check.py policy` lists the commands the project and its CI run. Use those, as CONTRIBUTING describes.
 - Add or update tests the way the project does. Never delete, skip or weaken a test to make it pass.
+- Add a changelog entry if the project keeps one (a news fragment, a changeset or a CHANGELOG line, in its format). `check.py diff` says which.
 - Never write "tests pass" or "verified" unless you ran it in this session. Say exactly what you ran and what you could not run.
 - Run `check.py diff --repo <repo>` and fix what it reports before showing the change to the person.
 
@@ -60,7 +61,7 @@ The checker in this skill's folder points at the lines that matter: `python3 <th
 - Use the project's PR template: what changed, why (link the issue), how it was tested. Usually under 150 words.
 - No filler, no emoji, no "This PR comprehensively enhances…". Save the draft outside the repository and check it with `check.py pr <file> --repo <repo>`. It also flags files, line numbers and functions the text mentions that don't exist: never cite code you haven't opened.
 - Disclose AI help in the format the project asks for (an `Assisted-by:` trailer, a line in the description, a checkbox). If it asks for nothing, suggest one plain line, such as "I used <tool> to help write this; I reviewed and tested every change." The person decides.
-- Never add an AI tool as `Co-authored-by`. Never add `Signed-off-by` for the person; only they can certify their work.
+- Never add an AI tool as `Co-authored-by`. Never add `Signed-off-by` for the person; only they can certify their work. The same goes for a CLA: if the project needs one, tell the person, and never sign it or answer the CLA bot for them.
 - If the project wants issues or PR text written by people, give the person notes, not finished prose.
 - The person reads every line, and the person submits. Do not push, open the PR or post comments unless they tell you to, each time.
 
@@ -78,8 +79,8 @@ With the Claude Code plugin, the same checks run automatically before `git push`
 - [ ] Policy read, AI help accepted, disclosure format known
 - [ ] An issue maintainers want; not claimed; no duplicate PR
 - [ ] Small diff; every line traces to the issue; no tooling or junk files
-- [ ] The project's own checks run; results reported honestly
+- [ ] The project's own checks run; results reported honestly; changelog entry if it wants one
 - [ ] PR text short, in the template, disclosed; `check.py all --repo <repo> --pr <file>` clean or explained
-- [ ] The person has reviewed everything and will submit it themselves
+- [ ] The person has reviewed everything, signs any CLA or sign-off, and will submit it themselves
 
 **Tradeoff:** this is slower than "just open the PR". That is the point. Every PR you send costs a maintainer real time.

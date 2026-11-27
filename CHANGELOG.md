@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0
+
+- **Other issues to work on.** When `check.py issue <number>` finds the issue taken (closed, assigned, claimed, not ready, already being fixed, or a good first issue the project keeps for newcomers), it now lists up to five other open, unassigned issues to offer the person, accepted ones first. It suggests nothing when the project doesn't accept AI help at all.
+- **Changelog entries.** `check.py diff` now notices when a project records changes as separate files (towncrier, changesets, reno, scriv or a `changelog.d` folder) or asks for a CHANGELOG line in its contributing guide or PR template, and flags a code change that has none. It is a FIX when the project's CI checks for it, so the guard asks before the push.
+- **CLAs.** `check.py policy` now finds when a project needs a signed Contributor License Agreement (in its guides, its PR template, a CLA bot or a CLA check in CI) and reminds the agent that only the person can sign it. Wording like "no CLA is required" doesn't count.
+- 15 new tests, 104 in all. Tried on pip, changesets, Click, Requests and Python Fire.
+
 ## 1.2.0
 
 - **Fact check.** `check.py pr` (and `all --pr`) now flags files, line numbers and functions that a pull request description mentions but the repository doesn't have, before or after the change. It's a common sign of text written without reading the code.

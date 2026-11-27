@@ -15,7 +15,7 @@ Before your agent touches someone else's project, it reads that project's AI pol
 - **Reads the house rules first.** It finds AI policies in CONTRIBUTING files, AI_POLICY files and PR templates, and it knows the published policies of 189 projects.
 - **Stops at the source.** Other anti-slop tools act after a pull request arrives. This one acts before the pull request exists.
 - **Enforces, not just advises.** In Claude Code, a hook blocks pushes, pull requests, patch emails and new issues to a project that doesn't accept AI help.
-- **Catches the usual slop.** It flags agent files left in the diff, skipped tests, lockfile churn, AI co-author lines, filler PR text, and files or functions the text cites that don't exist.
+- **Catches the usual slop.** It flags agent files left in the diff, skipped tests, lockfile churn, AI co-author lines, missing changelog entries, filler PR text, and files or functions the text cites that don't exist.
 - **Works for both sides.** Contributors get the checks, and maintainers get **ai-policy-writer** to publish rules agents can read exactly.
 - **Light and private.** Python standard library only, no network calls by default, and about 400 tokens per session until it's needed.
 
@@ -147,13 +147,14 @@ Result: Fix the items marked FIX, then run this again.
 
 The full output also says how to fix each one.
 
-- **What it reads:** AI policy files, CONTRIBUTING guides, PR and issue templates, `AGENTS.md`, and the commands the project's CI runs. It understands scope, so "don't use AI for issues" is a condition, while "we decline AI-generated contributions" is a stop.
+- **What it reads:** AI policy files, CONTRIBUTING guides, PR and issue templates, `AGENTS.md`, and the commands the project's CI runs. It understands scope, so "don't use AI for issues" is a condition, while "we decline AI-generated contributions" is a stop. It also notices when the project needs a signed CLA or a DCO sign-off, which only the person can give.
 - **What it knows:** the published policies of 189 projects, from the public-domain [open-source AI contribution policies](https://github.com/melissawm/open-source-ai-contribution-policies) list. That lets it stop even when a policy lives on a website, as with Flask, Servo, Gentoo and Zig.
 - **What it catches in your change:**
   - your own AI tool files, notes, plans, and editor or secret files;
   - whitespace-only edits, lockfile churn and the wrong package manager;
   - deleted or skipped tests and weakened assertions;
-  - debug leftovers, AI `Co-authored-by` and "Generated with" lines, and changes too big to review.
+  - debug leftovers, AI `Co-authored-by` and "Generated with" lines, and changes too big to review;
+  - a missing changelog entry when the project keeps one: a news fragment (towncrier, changesets, reno, scriv or a `changelog.d` folder) or a CHANGELOG line its guide asks for.
 - **What it catches in your text:** files, line numbers and functions that the PR description or bug report mentions but the repository doesn't have, a common sign it was written without reading the code. Bug reports also need a way to reproduce, a version and an expected result, and security reports get sent the private way.
 
 ### The guard
@@ -173,7 +174,7 @@ It was tested in real Claude Code sessions: a push and a patch email to a projec
 Only when you ask, and only through the GitHub CLI:
 
 ```bash
-python3 $CHECK issue 123         # open? accepted? already claimed? duplicate PRs?
+python3 $CHECK issue 123         # open? accepted? already claimed? duplicate PRs? if taken, what else is open
 python3 $CHECK policy --online   # also read the organization's .github policy
 ```
 
@@ -213,7 +214,7 @@ These tools solve different problems and work well together. sarwan_skill covers
 
 ## Tested on real projects
 
-The policy reader was checked against the published AI policies of 72 real projects ([eval/](eval/)). On the last 32, which the patterns had never seen, it agreed with the public policy list on 27, said "unclear, ask the person" on 4, and misread 1. Those wordings are now fixed and covered by tests. In all, 89 automated tests cover the checker, the guard, the policy writer and the before-and-after scoring.
+The policy reader was checked against the published AI policies of 72 real projects ([eval/](eval/)). On the last 32, which the patterns had never seen, it agreed with the public policy list on 27, said "unclear, ask the person" on 4, and misread 1. Those wordings are now fixed and covered by tests. In all, 104 automated tests cover the checker, the guard, the policy writer and the before-and-after scoring.
 
 ## FAQ
 
