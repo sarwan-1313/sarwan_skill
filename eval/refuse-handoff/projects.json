@@ -1,0 +1,626 @@
+[
+ {
+  "set": "main",
+  "name": "Alacritty",
+  "repo": "alacritty/alacritty",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Allium",
+  "repo": "moongardenmods/allium",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Apache Airflow",
+  "repo": "apache/airflow",
+  "policy_file": "contributing-docs/05_pull_requests.rst",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Apache CouchDB",
+  "repo": "apache/couchdb",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Apache PouchDB",
+  "repo": "apache/pouchdb",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Astropy",
+  "repo": "astropy/astropy-project",
+  "policy_file": "policies/ai-policy.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "attrs",
+  "repo": "python-attrs/attrs",
+  "policy_file": ".github/AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Cataclysm: Dark Days Ahead",
+  "repo": "CleverRaven/Cataclysm-DDA",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "cilium",
+  "repo": "cilium/community",
+  "policy_file": "AI-POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "CloudNativePG",
+  "repo": "cloudnative-pg/governance",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Decker",
+  "repo": "JohnEarnest/Decker",
+  "policy_file": "Readme.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "dlt",
+  "repo": "dlt-hub/dlt",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Dune 3D",
+  "repo": "dune3d/dune3d",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Endless Sky",
+  "repo": "endless-sky/endless-sky",
+  "policy_file": "docs/CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Fedify",
+  "repo": "fedify-dev/fedify",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Flutter",
+  "repo": "flutter/flutter",
+  "policy_file": "docs/contributing/Tree-hygiene.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Ghostty",
+  "repo": "ghostty-org/ghostty",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Gitea",
+  "repo": "go-gitea/gitea",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "goose",
+  "repo": "aaif-goose/goose",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Homebrew",
+  "repo": "Homebrew/brew",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Idris",
+  "repo": "idris-lang/Idris2",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Inochi2D",
+  "repo": "Inochi2D/inochi2d",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Jqwik",
+  "repo": "jqwik-team/jqwik",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "jsoup",
+  "repo": "jhy/jsoup",
+  "policy_file": ".github/CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Kornia",
+  "repo": "kornia/kornia",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "LinkML",
+  "repo": "linkml/linkml",
+  "policy_file": "AI_COVENANT.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Lobsters",
+  "repo": "lobsters/lobsters",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "MDAnalysis",
+  "repo": "MDAnalysis/mdanalysis",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "mGBA",
+  "repo": "mgba-emu/mgba",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Molecular Nodes",
+  "repo": "BradyAJohnston/MolecularNodes",
+  "policy_file": "AI_POLICY.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "OCaml",
+  "repo": "ocaml/ocaml",
+  "policy_file": "AI.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "OkHttp",
+  "repo": "lysine-dev/okhttp",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Open edX",
+  "repo": "openedx/.github",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "OpenTTD",
+  "repo": "OpenTTD/OpenTTD",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "pgwatch",
+  "repo": "cybertec-postgresql/pgwatch",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "pip",
+  "repo": "pypa/pip",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "pkgconf",
+  "repo": "pkgconf/pkgconf",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Polars",
+  "repo": "pola-rs/polars",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Processing/p5.js",
+  "repo": "processing/processing4",
+  "policy_file": "AI_USAGE_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Pytest",
+  "repo": "pytest-dev/pytest",
+  "policy_file": "CONTRIBUTING.rst",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "PyTorch",
+  "repo": "pytorch/pytorch",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "PyVista",
+  "repo": "pyvista/pyvista",
+  "policy_file": "CONTRIBUTING.rst",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "QGIS",
+  "repo": "qgis/QGIS-Enhancement-Proposals",
+  "policy_file": "qep-408-ai-tool-policy.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "qutip",
+  "repo": "qutip/qutip",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Requests",
+  "repo": "psf/requests",
+  "policy_file": ".github/AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "ruff",
+  "repo": "astral-sh/.github",
+  "policy_file": "AI_POLICY.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "RustPython",
+  "repo": "RustPython/.github",
+  "policy_file": "AI_POLICY.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Schism Tracker",
+  "repo": "schismtracker/schismtracker",
+  "policy_file": "AGENTS.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "SDL",
+  "repo": "libsdl-org/SDL",
+  "policy_file": ".github/PULL_REQUEST_TEMPLATE.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "SDL_net",
+  "repo": "libsdl-org/SDL_net",
+  "policy_file": "AGENTS.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "SearXNG",
+  "repo": "searxng/searxng",
+  "policy_file": "AI_POLICY.rst",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Sphinx",
+  "repo": "sphinx-doc/sphinx",
+  "policy_file": "doc/internals/ai-policy.rst",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "STAC",
+  "repo": "stac-utils/stac-utils.github.io",
+  "policy_file": "docs/ai-contribution-policy.md",
+  "rule": "person-must-submit",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "stb",
+  "repo": "nothings/stb",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Teamtype",
+  "repo": "teamtype/teamtype",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "TorchGeo",
+  "repo": "torchgeo/torchgeo",
+  "policy_file": ".github/AI_POLICY.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Unison",
+  "repo": "bcpierce00/unison",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "University of Alaska Anchorage",
+  "repo": "uaanchorage/GSoC",
+  "policy_file": "Acceptable-and-Ethical-AI-Use-Policy.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "WP1",
+  "repo": "openzim/wp1",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Xarray",
+  "repo": "pydata/xarray",
+  "policy_file": "doc/contribute/ai-policy.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "yt-dlp",
+  "repo": "yt-dlp/yt-dlp",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "main",
+  "name": "Zulip",
+  "repo": "zulip/zulip",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "allowed",
+  "source": "melissawm/open-source-ai-contribution-policies (CC0), checked against the repository's own files"
+ },
+ {
+  "set": "unseen",
+  "name": "Fyrox",
+  "repo": "FyroxEngine/Fyrox",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "MonoGame",
+  "repo": "MonoGame/MonoGame",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "fast-check",
+  "repo": "dubzzz/fast-check",
+  "policy_file": "AI_POLICY.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "Immich",
+  "repo": "immich-app/immich",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "Meilisearch",
+  "repo": "meilisearch/meilisearch",
+  "policy_file": ".github/pull_request_template.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "Flask-SocketIO",
+  "repo": "miguelgrinberg/Flask-SocketIO",
+  "policy_file": "CONTRIBUTING.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "pdfcpu",
+  "repo": "pdfcpu/pdfcpu",
+  "policy_file": ".github/pull_request_template.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "COSMIC",
+  "repo": "pop-os/cosmic-epoch",
+  "policy_file": ".github/PULL_REQUEST_TEMPLATE.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "QEMU",
+  "repo": "qemu/qemu",
+  "policy_file": "docs/devel/code-provenance.rst",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "QGIS",
+  "repo": "qgis/QGIS",
+  "policy_file": ".github/PULL_REQUEST_TEMPLATE.md",
+  "rule": "ban",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "OpenJDK",
+  "repo": "openjdk/jdk",
+  "policy_file": "",
+  "rule": "ban-website-only",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "Servo",
+  "repo": "servo/servo",
+  "policy_file": "",
+  "rule": "ban-website-only",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "NumPy",
+  "repo": "numpy/numpy",
+  "policy_file": "doc/source/dev/ai_policy.rst",
+  "rule": "person-must-submit",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "scikit-learn",
+  "repo": "scikit-learn/scikit-learn",
+  "policy_file": "doc/developers/contributing.rst",
+  "rule": "person-must-submit",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "llama.cpp",
+  "repo": "ggml-org/llama.cpp",
+  "policy_file": "AGENTS.md",
+  "rule": "person-must-submit",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ },
+ {
+  "set": "unseen",
+  "name": "InVEST plugin registry",
+  "repo": "natcap/invest-plugin-registry",
+  "policy_file": ".github/pull_request_template.md",
+  "rule": "allowed",
+  "source": "Open Source Says No / explainx.ai (bans); NumPy, scikit-learn, llama.cpp and InVEST read by hand"
+ }
+]

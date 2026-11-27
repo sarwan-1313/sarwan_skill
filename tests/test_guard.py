@@ -97,6 +97,33 @@ class GuardTests(unittest.TestCase):
         self.assertEqual(out["permissionDecision"], "deny")
         self.assertIn("does not accept", out["permissionDecisionReason"])
 
+    HANDOFF = ("# Contributing\n\n## AI tools\n\nAI help is fine if you disclose it, but AI agents must not open "
+               "pull requests: a person reviews and submits every change.\n")
+
+    def test_handoff_to_the_person(self):
+        self.r.write({"CONTRIBUTING.md": self.HANDOFF})
+        self.r.commit("policy")
+        git(self.r.path, "branch", "-f", "main", "HEAD")
+        self.r.write({"src/app.py": "x = 2\n"})
+        self.r.commit("Fix x")
+        out = self.hook("gh pr create --title 'Fix x' --body 'Fixes #1. I used Claude Code and reviewed it.'")
+        self.assertEqual(out["permissionDecision"], "ask")
+        self.assertIn("wants a person, not an agent", out["permissionDecisionReason"])
+        self.assertIn("CONTRIBUTING.md:5", out["permissionDecisionReason"])
+        self.assertIsNone(self.hook("git push origin work"))  # the person's own fork: not a submission
+        decision, _ = guard.decide(self.r.path, "gh pr create --fill")  # a git hook or a person: no handoff
+        self.assertEqual(decision, "allow")
+
+    def test_handoff_from_the_policy_block(self):
+        block = ("# Contributing\n\n## AI contributions\n\n```ai-contribution-policy\nversion: 1\n"
+                 "ai-assistance: allowed\ndisclosure: not-needed\nagent-opened-prs: no\n```\n")
+        self.r.write({"CONTRIBUTING.md": block})
+        self.r.commit("policy")
+        git(self.r.path, "branch", "-f", "main", "HEAD")
+        out = self.hook("gh issue create --title 'Crash on start' --body 'It crashes on start with version 1.0.'")
+        self.assertEqual(out["permissionDecision"], "ask")
+        self.assertIn("wants a person, not an agent", out["permissionDecisionReason"])
+
     def test_patch_email_to_a_banned_project_is_denied(self):
         self.r.write({"CONTRIBUTING.md": BAN})
         self.r.commit("policy")
